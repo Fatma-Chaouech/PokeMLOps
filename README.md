@@ -27,3 +27,17 @@ dvc pull
 ```
 export PYTHONPATH=$PWD/src:$PYTHONPATH
 ```
+### Usage
+1. Navigate to the project directory
+```
+cd PokeMLOps
+```
+2. Preprocess the dataset
+```
+python3 src/preprocess/proprocess.py <dataset_dir> <output_dir>
+```
+3. Split the dataset
+```
+python3 src/split/split.py <dataset_dir> <output_dir> <train_perc> <val_perc> <random_state>
+```
+Note that there all default values for the arguments.
