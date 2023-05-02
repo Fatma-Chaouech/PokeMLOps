@@ -1,7 +1,7 @@
 import argparse
 import torch
 import torch.nn as nn
-from model.model import PokeModel
+from models.model import PokeModel
 from utils.utils import get_loader, save_model, save_loss_acc
 
 
