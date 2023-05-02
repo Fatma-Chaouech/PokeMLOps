@@ -18,12 +18,13 @@ dependencies:
   - backports=1.0=pyhd8ed1ab_3
   - backports.functools_lru_cache=1.6.4=pyhd8ed1ab_0
   - billiard=3.6.4.0=py311hd4cff14_3
+  - blas=1.0=mkl
   - brotlipy=0.7.0=py311hd4cff14_1005
   - bzip2=1.0.8=h7f98852_4
-  - ca-certificates=2022.12.7=ha878542_0
+  - ca-certificates=2023.01.10=h06a4308_0
   - cachetools=5.3.0=pyhd8ed1ab_0
   - celery=5.2.7=pyhd8ed1ab_0
-  - certifi=2022.12.7=pyhd8ed1ab_0
+  - certifi=2022.12.7=py311h06a4308_0
   - cffi=1.15.1=py311h409f033_3
   - charset-normalizer=2.0.4=pyhd3eb1b0_0
   - click=8.1.3=unix_pyhd8ed1ab_2
@@ -67,7 +68,9 @@ dependencies:
   - idna=3.4=pyhd8ed1ab_0
   - importlib-metadata=6.6.0=pyha770c72_0
   - importlib_resources=5.12.0=pyhd8ed1ab_0
+  - intel-openmp=2021.4.0=h06a4308_3561
   - iterative-telemetry=0.0.8=pyhd8ed1ab_0
+  - joblib=1.1.1=py311h06a4308_0
   - keyutils=1.6.1=h166bdaf_0
   - kombu=5.2.4=py311h38be061_2
   - krb5=1.20.1=h81ceb04_0
@@ -76,6 +79,8 @@ dependencies:
   - libexpat=2.5.0=hcb278e6_1
   - libffi=3.4.2=h7f98852_5
   - libgcc-ng=12.2.0=h65d4601_19
+  - libgfortran-ng=11.2.0=h00389a5_1
+  - libgfortran5=11.2.0=h1234567_1
   - libgit2=1.6.4=h747ad27_0
   - libgomp=12.2.0=h65d4601_19
   - libnsl=2.0.0=h7f98852_0
@@ -87,10 +92,16 @@ dependencies:
   - libzlib=1.2.13=h166bdaf_4
   - markdown-it-py=2.2.0=pyhd8ed1ab_0
   - mdurl=0.1.0=pyhd8ed1ab_0
+  - mkl=2021.4.0=h06a4308_640
+  - mkl-service=2.4.0=py311h5eee18b_0
+  - mkl_fft=1.3.1=py311h30b3d60_0
+  - mkl_random=1.2.2=py311hba01205_0
   - multidict=6.0.4=py311h2582759_0
   - nanotime=0.5.2=py_0
   - ncurses=6.3=h27087fc_1
   - networkx=3.1=pyhd8ed1ab_0
+  - numpy=1.24.3=py311hc206e33_0
+  - numpy-base=1.24.3=py311hfd5febd_0
   - oauth2client=4.1.3=py_0
   - omegaconf=2.3.0=pyhd8ed1ab_0
   - openssl=3.1.0=hd590300_2
@@ -101,6 +112,7 @@ dependencies:
   - pcre2=10.40=hc3806b6_0
   - pip=23.1.2=pyhd8ed1ab_0
   - platformdirs=3.5.0=pyhd8ed1ab_0
+  - pooch=1.4.0=pyhd3eb1b0_0
   - prompt-toolkit=3.0.38=pyha770c72_0
   - prompt_toolkit=3.0.38=hd8ed1ab_0
   - protobuf=4.21.12=py311hcafe171_0
@@ -129,6 +141,8 @@ dependencies:
   - rsa=4.9=pyhd8ed1ab_0
   - ruamel.yaml=0.17.21=py311h2582759_3
   - ruamel.yaml.clib=0.2.7=py311h2582759_1
+  - scikit-learn=1.2.2=py311h6a678d5_0
+  - scipy=1.10.1=py311hc206e33_0
   - scmrepo=1.0.2=pyhd8ed1ab_0
   - setuptools=67.7.2=pyhd8ed1ab_0
   - shortuuid=1.0.11=pyhd8ed1ab_0
@@ -137,6 +151,7 @@ dependencies:
   - smmap=3.0.5=pyh44b312d_0
   - sqltrie=0.3.1=pyhd8ed1ab_0
   - tabulate=0.9.0=pyhd8ed1ab_1
+  - threadpoolctl=2.2.0=pyh0d69192_0
   - tk=8.6.12=h27826a3_0
   - tomlkit=0.11.7=pyha770c72_0
   - tqdm=4.65.0=pyhd8ed1ab_1
@@ -161,7 +176,6 @@ dependencies:
       - lit==16.0.2
       - markupsafe==2.1.2
       - mpmath==1.3.0
-      - numpy==1.24.3
       - nvidia-cublas-cu11==11.10.3.66
       - nvidia-cuda-cupti-cu11==11.7.101
       - nvidia-cuda-nvrtc-cu11==11.7.99

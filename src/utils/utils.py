@@ -2,8 +2,12 @@ import os
 import shutil
 import torch
 import warnings
+from torchvision import datasets
+import logging
 
 warnings.filterwarnings("ignore", category=UserWarning)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 def save_dataset(dataset, output_dir, raw_dir):
@@ -52,9 +56,9 @@ def save_files(dir, files, dataset_dir):
         None.
 
     Example:
-        save_files("data/train", ["cat.jpg", "dog.jpg"], "data/raw")
+        save_files("data/splits/train/Fearow", ["34.pt", "6.pt"], "data/preprocessed")
 
-    This will save the "cat.jpg" and "dog.jpg" files from the "data/raw" directory to the "data/train" directory.
+    This will save the "34.pt" and "6.pt" files from the "data/preprocessed" directory to the "data/splits/train/Fearow" directory.
     """
     if not os.path.exists(dir):
         os.makedirs(dir)
@@ -62,3 +66,21 @@ def save_files(dir, files, dataset_dir):
         src_file = os.path.join(dataset_dir, file)
         dst_file = os.path.join(dir, file)
         shutil.copy(src_file, dst_file)
+    logger.info('Finished with ', dir)
+
+
+def get_loader(path, batch_size=64, shuffle=True):
+    print(path)
+    dataset = datasets.ImageFolder(path)
+    loader = torch.utils.data.DataLoader(
+        dataset, batch_size=batch_size, shuffle=shuffle, num_workers=2)
+    return loader
+
+
+def save_model(model, model_path):
+    torch.save(model.state_dict(), model_path)
+
+
+def save_loss_acc(loss, accuracy):
+    with open("val_loss_acc.txt", "w") as f:
+        f.write(f"Validation Loss: {loss}\nValidation Accuracy: {accuracy}")

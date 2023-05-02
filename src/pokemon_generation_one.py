@@ -17,7 +17,8 @@ transform = transforms.Compose([
     transforms.RandomRotation(30),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
-    transforms.Lambda(lambda x: transforms.functional.to_pil_image(x).convert('RGBA') if x.shape[0] == 4 else transforms.functional.to_pil_image(x)),
+    transforms.Lambda(lambda x: transforms.functional.to_pil_image(x).convert(
+        'RGBA') if x.shape[0] == 4 else transforms.functional.to_pil_image(x)),
     transforms.ToTensor(),
     transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
 ])
@@ -30,14 +31,17 @@ test_size = len(dataset) - train_size
 train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
 
 # Create data loaders for the training and testing sets
-trainloader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=2)
-testloader = torch.utils.data.DataLoader(test_dataset, batch_size=64, shuffle=False, num_workers=2)
+trainloader = torch.utils.data.DataLoader(
+    train_dataset, batch_size=64, shuffle=True, num_workers=2)
+testloader = torch.utils.data.DataLoader(
+    test_dataset, batch_size=64, shuffle=False, num_workers=2)
 
 # get the labels
 labels = []
 for _, dirs, _ in os.walk(DATASET_ROOT):
-  labels.extend(dirs)
+    labels.extend(dirs)
 labels = [label for label in labels if label != '']
+
 
 def imshow(img, ax, transform):
     img = transform(img)
@@ -47,7 +51,8 @@ def imshow(img, ax, transform):
 def show_n_batches(loader, n, figsize=(20, 20), ncols=4):
     transform = transforms.Compose([
         transforms.Lambda(lambda x: x.numpy().transpose((1, 2, 0))),
-        transforms.Lambda(lambda x: np.clip(x * np.array([0.229, 0.224, 0.225]) + np.array([0.485, 0.456, 0.406]), 0, 1))
+        transforms.Lambda(lambda x: np.clip(
+            x * np.array([0.229, 0.224, 0.225]) + np.array([0.485, 0.456, 0.406]), 0, 1))
     ])
     for images, targets in loader:
         fig, axes = plt.subplots(figsize=figsize, ncols=ncols)
@@ -60,25 +65,28 @@ def show_n_batches(loader, n, figsize=(20, 20), ncols=4):
 
 show_n_batches(trainloader, n=4)
 
+
 def imshow(img, ax):
-  transform = transforms.Compose([
+    transform = transforms.Compose([
         transforms.Lambda(lambda x: x.numpy().transpose((1, 2, 0))),
-        transforms.Lambda(lambda x: np.clip(x * np.array([0.229, 0.224, 0.225]) + np.array([0.485, 0.456, 0.406]), 0, 1))
+        transforms.Lambda(lambda x: np.clip(
+            x * np.array([0.229, 0.224, 0.225]) + np.array([0.485, 0.456, 0.406]), 0, 1))
     ])
-  img = transform(img)
-  ax.imshow(img)
+    img = transform(img)
+    ax.imshow(img)
 
 
-def show_n_batches(loader, n, figsize = (20, 20), ncols = 4):
+def show_n_batches(loader, n, figsize=(20, 20), ncols=4):
 
-  while n:
-    images, targets = next(iter(loader))
-    fig, axes = plt.subplots(figsize=figsize, ncols=ncols)
-    for idx in range(ncols):
-        ax = axes[idx]
-        print(labels[targets[idx]])
-        imshow(images[idx], ax=ax)
-    n -= 1
+    while n:
+        images, targets = next(iter(loader))
+        fig, axes = plt.subplots(figsize=figsize, ncols=ncols)
+        for idx in range(ncols):
+            ax = axes[idx]
+            print(labels[targets[idx]])
+            imshow(images[idx], ax=ax)
+        n -= 1
+
 
 show_n_batches(trainloader, n=4)
 
@@ -157,7 +165,8 @@ def train_model(model, trainloader, criterion, optimizer, scheduler, num_epochs=
     print()
 
     time_elapsed = time.time() - since
-    print(f"Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s")
+    print(
+        f"Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s")
     print(f"Best val Acc: {best_acc:4f}")
 
     # load best model weights
@@ -165,7 +174,9 @@ def train_model(model, trainloader, criterion, optimizer, scheduler, num_epochs=
 
     return model, best_acc
 
-model = torch.hub.load('pytorch/vision:v0.10.0', 'vgg11', weights=True).to(device)
+
+model = torch.hub.load('pytorch/vision:v0.10.0',
+                       'vgg11', weights=True).to(device)
 
 for param in model.features.parameters():
     param.requires_grad = False
@@ -175,24 +186,26 @@ num_ftrs = model.classifier[6].in_features
 model.fc = torch.nn.Linear(num_ftrs, len(labels))
 criterion = torch.nn.CrossEntropyLoss()
 optimizer_ft = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
+exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(
+    optimizer_ft, step_size=7, gamma=0.1)
 
 model = train_model(model, trainloader, criterion, optimizer_ft, exp_lr_scheduler,
-                       num_epochs=20)
+                    num_epochs=20)
 
 for param in model.features.parameters():
     param.requires_grad = True
 
 model = train_model(model, trainloader, criterion, optimizer_ft, exp_lr_scheduler,
-                       num_epochs=4)
+                    num_epochs=4)
+
 
 def eval_model(model, testloader, criterion):
-  running_loss = 0.0
-  running_corrects = 0
-  for inputs, labels in testloader:
+    running_loss = 0.0
+    running_corrects = 0
+    for inputs, labels in testloader:
         inputs = inputs.to(device)
         labels = labels.to(device)
-                  
+
         with torch.no_grad():
             outputs = model(inputs)
             _, preds = torch.max(outputs, 1)
@@ -200,11 +213,11 @@ def eval_model(model, testloader, criterion):
 
         running_loss += loss.item() * inputs.size(0)
         running_corrects += torch.sum(preds == labels.data)
-  loss = running_loss / len(trainloader.dataset)
-  accuracy = running_corrects.double() / len(trainloader.dataset)
-  print('---------------------------------------------')
-  print(f"Loss on test: {loss:.4f} Acc: {accuracy:.4f}")
-  print('---------------------------------------------')
+    loss = running_loss / len(trainloader.dataset)
+    accuracy = running_corrects.double() / len(trainloader.dataset)
+    print('---------------------------------------------')
+    print(f"Loss on test: {loss:.4f} Acc: {accuracy:.4f}")
+    print('---------------------------------------------')
+
 
 eval_model(model, testloader, criterion)
-

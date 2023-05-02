@@ -1,7 +1,7 @@
 import argparse
 from sklearn.model_selection import train_test_split
 import os
-from utils import utils
+from utils.utils import save_files
 
 
 def run():
@@ -25,11 +25,14 @@ def run():
 
     for folder in os.listdir(dataset_dir):
         folder_path = os.path.join(dataset_dir, folder)
+        train_sub_dir = os.path.join(train_dir, folder)
+        val_sub_dir = os.path.join(val_dir, folder)
+        test_sub_dir = os.path.join(test_dir, folder)
         train_files, val_files, test_files = generate_splits(
             folder_path, train_perc, val_perc, random_state)
-        utils.save_files(train_dir, train_files, folder_path)
-        utils.save_files(val_dir, val_files, folder_path)
-        utils.save_files(test_dir, test_files, folder_path)
+        save_files(train_sub_dir, train_files, folder_path)
+        save_files(val_sub_dir, val_files, folder_path)
+        save_files(test_sub_dir, test_files, folder_path)
 
 
 def generate_splits(folder_path, train_perc, val_perc, random_state):
