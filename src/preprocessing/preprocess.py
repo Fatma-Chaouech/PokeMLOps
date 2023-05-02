@@ -6,7 +6,7 @@ from utils.utils import save_dataset
 def run():
     dataset_root, output_dir = get_args()
     dataset = preprocess(dataset_root)
-    save_dataset(dataset, output_dir, raw_dir=dataset_root)
+    save_dataset(dataset, output_dir)
 
 
 def preprocess(dataset_root):

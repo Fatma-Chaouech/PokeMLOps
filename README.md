@@ -72,7 +72,7 @@ Optional arguments:
 
 * --num_epochs:  Number of epochs to train for (default: 20)
 
-* --batch_size  :Batch size for training (default: 64)
+* --batch_size  :Batch size for training (default: 16)
 
 * --learning_rate : Learning rate for training (default: 0.01)
 

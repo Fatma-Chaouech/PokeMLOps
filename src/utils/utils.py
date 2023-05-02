@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def save_dataset(dataset, output_dir, raw_dir):
-    labels = get_labels(raw_dir)
+def save_dataset(dataset, output_dir):
+    labels = dataset.classes
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -34,23 +34,6 @@ def save_dataset(dataset, output_dir, raw_dir):
         filepath = os.path.join(label_dir, filename)
         image = transform(image)
         image_pil.save(filepath)
-
-
-def get_labels(root):
-    """
-    Gets a list of class labels from the subdirectories in the specified root directory.
-
-    Args:
-        root (str): The root directory containing the subdirectories of class labels.
-
-    Returns:
-        labels (list): A list of class labels.
-    """
-    labels = []
-    for subdir in os.listdir(root):
-        if os.path.isdir(os.path.join(root, subdir)):
-            labels.append(subdir)
-    return sorted(labels)
 
 
 def save_files(dir, files, dataset_dir):
@@ -78,11 +61,14 @@ def save_files(dir, files, dataset_dir):
         shutil.copy(src_file, dst_file)
 
 
-def get_loader(path, batch_size=64, shuffle=True):
-    dataset = datasets.ImageFolder(path)
+def get_loader(path, batch_size=16, shuffle=True):
+    transform = transforms.Compose([
+        transforms.ToTensor()
+    ])
+    dataset = datasets.ImageFolder(path, transform=transform)
     loader = torch.utils.data.DataLoader(
         dataset, batch_size=batch_size, shuffle=shuffle, num_workers=2)
-    return loader
+    return loader, len(set(dataset.targets))
 
 
 def save_model(model, model_path):

@@ -7,12 +7,13 @@ from utils.utils import get_loader, save_model, save_loss_acc
 
 def run():
     train_path, val_path, model_path, num_epochs, batch_size, learning_rate = get_args()
-    trainloader = get_loader(train_path, batch_size)
-    valloader = get_loader(val_path, batch_size)
-    model = PokeModel()
-    trainer = PokeTrainer(model, trainloader, valloader, learning_rate)
-    model, val_loss, val_accuracy = trainer.train(num_epochs)
-    save_model(model, model_path)
+    trainloader, num_classes = get_loader(train_path, batch_size)
+    valloader, _ = get_loader(val_path, batch_size)
+    classifier = PokeModel(num_classes)
+    trainer = PokeTrainer(classifier, trainloader, valloader, learning_rate)
+    classifier.model.requires_grad = True
+    classifier, val_loss, val_accuracy = trainer.train(num_epochs)
+    save_model(classifier, model_path)
     save_loss_acc(val_loss, val_accuracy)
 
 
@@ -110,7 +111,7 @@ def get_args():
     parser.add_argument('--num_epochs', type=int,
                         default=20, help='Number of epochs of the training')
     parser.add_argument('--batch_size', type=int,
-                        default=64, help='Batch size of the training')
+                        default=16, help='Batch size of the training')
     parser.add_argument('--learning_rate', type=float,
                         default=0.01, help='Learning rate of the training')
     args = parser.parse_args()
