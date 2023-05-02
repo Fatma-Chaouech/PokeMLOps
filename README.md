@@ -36,45 +36,18 @@ cd PokeMLOps
 ```
 python3 src/preprocessing/preprocess.py [--root ROOT] [--output OUTPUT]
 ```
-Optional arguments:
-* --root : Dataset root directory (default: data/raw)
-* --output : Directory to save preprocessed data (default: data/preprocessed)
+
 
 3. Split the dataset
 ```
 python3 src/splitting/split.py [--root ROOT] [--output OUTPUT] [--train_percentage TRAIN_PERCENTAGE] [--val_percentage VAL_PERCENTAGE] [--random_state RANDOM_STATE]
 ```
 
-Optional arguments:
-
-*  --root         :     Dataset root directory (default: data/preprocessed) 
-
-* --output    : Output directory of the splits (default: data/splits) 
-
-* --train_percentage :  Train split percentage of the entire dataset (default: 0.7) 
-
-* --val_percentage   :  Validation split percentage of the entire dataset (default: 0.15) 
-
-* --random_state  : Random seed of the splits (default: 42)
 
 4. Train the model
 ```
 python3 src/training/train.py [--train_path TRAIN_PATH] [--val_path VAL_PATH] [--model_path MODEL_PATH] [--num_epochs NUM_EPOCHS] [--batch_size BATCH_SIZE] [--learning_rate LEARNING_RATE]
 ```
-
-Optional arguments:
-
-* --train_path :Path to the training data (default: data/splits/train)
-
-* --val_path : Path to the validation data (default: data/splits/val)
-
-* --model_path :Path to save the trained model (default: saved_models)
-
-* --num_epochs:  Number of epochs to train for (default: 20)
-
-* --batch_size  :Batch size for training (default: 16)
-
-* --learning_rate : Learning rate for training (default: 0.01)
 
 
 Note that there are default values for the arguments.

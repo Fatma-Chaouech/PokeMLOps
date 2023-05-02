@@ -12,29 +12,55 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
+# def save_dataset(dataset, output_dir):
+#     labels = dataset.classes
+#     if not os.path.exists(output_dir):
+#         os.makedirs(output_dir)
+
+#     # Define the transformation
+#     transform = transforms.Compose([
+#         transforms.ToPILImage(mode='RGB')
+#     ])
+
+#     for i, (image, label_idx) in enumerate(dataset):
+#         label = labels[label_idx]
+#         image_np = image.mul(255).byte().numpy()
+#         # transform to the format expected by PIL
+#         image_pil = Image.fromarray(np.transpose(image_np, (1, 2, 0)))
+#         label_dir = os.path.join(output_dir, str(label))
+#         if not os.path.exists(label_dir):
+#             os.makedirs(label_dir)
+#         filename = f"{i}.png"
+#         filepath = os.path.join(label_dir, filename)
+#         image = transform(image)
+#         image_pil.save(filepath)
+
+
 def save_dataset(dataset, output_dir):
     labels = dataset.classes
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-
-    # Define the transformation
-    transform = transforms.Compose([
-        transforms.ToPILImage(mode='RGB')
-    ])
-
     for i, (image, label_idx) in enumerate(dataset):
+        # image = Image.fromarray()
         label = labels[label_idx]
-        image_np = image.mul(255).byte().numpy()
-        # transform to the format expected by PIL
-        image_pil = Image.fromarray(np.transpose(image_np, (1, 2, 0)))
         label_dir = os.path.join(output_dir, str(label))
         if not os.path.exists(label_dir):
             os.makedirs(label_dir)
         filename = f"{i}.png"
         filepath = os.path.join(label_dir, filename)
+        
+        # Denormalize the image
+        # print(image.shape)
+        # image = (image * torch.tensor([0.229, 0.224, 0.225]).reshape(3, 1, 1)) + torch.tensor([0.485, 0.456, 0.406]).reshape(3, 1, 1)
+        # image = torch.clamp(image, 0, 1)
+        # print(image.shape)
+        transform = transforms.Compose([
+            transforms.ToPILImage(mode='RGB')
+        ])
         image = transform(image)
-        image_pil.save(filepath)
-
+        image.save(filepath)
+        print(filepath)
+        break
 
 def save_files(dir, files, dataset_dir):
     """
@@ -69,6 +95,26 @@ def get_loader(path, batch_size=16, shuffle=True):
     loader = torch.utils.data.DataLoader(
         dataset, batch_size=batch_size, shuffle=shuffle, num_workers=2)
     return loader, len(set(dataset.targets))
+
+
+def get_image(image_path):
+    image = Image.open(image_path)
+    print(type(image))
+    transform = transforms.Compose([
+        transforms.ToTensor()
+    ])
+    return transform(image)
+
+
+def save_image(image, image_path):
+    if not os.path.exists(image_path):
+        os.makedirs(image_path)
+    image_path = os.path.join(image_path, 'visualization.png')
+    transform = transforms.Compose([
+        transforms.ToPILImage(mode='RGB')
+    ])
+    image = transform(image)
+    image.save(image_path)
 
 
 def save_model(model, model_path):
