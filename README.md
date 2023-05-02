@@ -36,31 +36,42 @@ cd PokeMLOps
 ```
 python3 src/preprocessing/preprocess.py [--root ROOT] [--output OUTPUT]
 ```
-optional arguments:
-  --root ROOT           Dataset root directory (default: data/raw)
-  --output OUTPUT       Directory to save preprocessed data (default: data/preprocessed)
+\textbf{Optional arguments:}
+\hspace{1cm} \texttt{--root ROOT|: Dataset root directory (default: data/raw)}\\
+\hspace{1cm} \texttt{--output OUTPUT|: Directory to save preprocessed data (default: data/preprocessed)}
 
 3. Split the dataset
 ```
-python3 src/splitting/split.py [--root ROOT] [--output OUTPUT] [--train_percentage TRAIN_PERCENTAGE] [--val_percentage VAL_PERCENTAGE] [--random_state RANDOM_STATE]
+python3 src/splitting/split.py [--root ROOT] [--output OUTPUT] [--train_percentage TRAIN\_PERCENTAGE] [--val_percentage VAL\_PERCENTAGE] [--random\_state RANDOM\_STATE]
 ```
-optional arguments:
-  --root ROOT                Dataset root directory (default: data/preprocessed)
-  --output OUTPUT            Output directory of the splits (default: data/splits)
-  --train_percentage TRAIN_PERCENTAGE    Train split percentage of the entire dataset (default: 0.7)
-  --val_percentage VAL_PERCENTAGE        Validation split percentage of the entire dataset (default: 0.15)
-  --random_state RANDOM_STATE           Random seed of the splits (default: 42)
+
+\textbf{Optional arguments:}
+
+\hspace{1cm} \texttt{--root ROOT} & - & Dataset root directory (default: data/preprocessed) \\
+\hspace{1cm} \texttt{--output OUTPUT} & - & Output directory of the splits (default: data/splits) \\
+\hspace{1cm} \texttt{--train\_percentage TRAIN\_PERCENTAGE} & - & Train split percentage of the entire dataset (default: 0.7) \\
+\hspace{1cm} \texttt{--val\_percentage VAL\_PERCENTAGE} & - & Validation split percentage of the entire dataset (default: 0.15) \\
+\hspace{1cm} \texttt{--random\_state RANDOM\_STATE} & - & Random seed of the splits (default: 42)
+
+
 4. Train the model
 ```
-python3 src/training/train.py [--train_path TRAIN_PATH] [--val_path VAL_PATH] [--model_path MODEL_PATH] [--num_epochs NUM_EPOCHS] [--batch_size BATCH_SIZE] [--learning_rate LEARNING_RATE]
+python3 src/training/train.py [--train\_path TRAIN\_PATH] [--val\_path VAL\_PATH] [--model\_path MODEL\_PATH] [--num\_epochs NUM\_EPOCHS] [--batch\_size BATCH\_SIZE] [--learning\_rate LEARNING\_RATE]
 ```
-optional arguments:
-  --train_path TRAIN_PATH           Path to the training data (default: data/splits/train)
-  --val_path VAL_PATH               Path to the validation data (default: data/splits/val)
-  --model_path MODEL_PATH           Path to save the trained model (default: saved_models)
-  --num_epochs NUM_EPOCHS           Number of epochs to train for (default: 20)
-  --batch_size BATCH_SIZE           Batch size for training (default: 64)
-  --learning_rate LEARNING_RATE     Learning rate for training (default: 0.01)
+
+\textbf{Optional arguments:}
+
+\hspace{1cm} \texttt{--train\_path TRAIN\_PATH} \hspace{1cm} Path to the training data (default: data/splits/train)}\\
+
+\hspace{1cm} \texttt{--val\_path VAL\_PATH} \hspace{1.5cm} Path to the validation data (default: data/splits/val)}\\
+
+\hspace{1cm} \texttt{--model\_path MODEL\_PATH} \hspace{0.65cm} Path to save the trained model (default: saved\_models)}\\
+
+\hspace{1cm} \texttt{--num\_epochs NUM\_EPOCHS} \hspace{1cm} Number of epochs to train for (default: 20)}\\
+
+\hspace{1cm} \texttt{--batch\_size BATCH\_SIZE} \hspace{1cm} Batch size for training (default: 64)}\\
+
+\hspace{1cm} \texttt{--learning\_rate LEARNING\_RATE} \hspace{0.5cm} Learning rate for training (default: 0.01)}
 
 
 Note that there are default values for the arguments.
