@@ -42,7 +42,7 @@ Optional arguments:
 
 3. Split the dataset
 ```
-python3 src/splitting/split.py [--root ROOT] [--output OUTPUT] [--train_percentage TRAIN\_PERCENTAGE] [--val_percentage VAL\_PERCENTAGE] [--random\_state RANDOM\_STATE]
+python3 src/splitting/split.py [--root ROOT] [--output OUTPUT] [--train_percentage TRAIN_PERCENTAGE] [--val_percentage VAL_PERCENTAGE] [--random_state RANDOM_STATE]
 ```
 
 Optional arguments:
@@ -51,30 +51,30 @@ Optional arguments:
 
 * --output    : Output directory of the splits (default: data/splits) 
 
-* --train\_percentage :  Train split percentage of the entire dataset (default: 0.7) 
+* --train_percentage :  Train split percentage of the entire dataset (default: 0.7) 
 
-* --val\_percentage   :  Validation split percentage of the entire dataset (default: 0.15) 
+* --val_percentage   :  Validation split percentage of the entire dataset (default: 0.15) 
 
-* --random\_state  : Random seed of the splits (default: 42)
+* --random_state  : Random seed of the splits (default: 42)
 
 4. Train the model
 ```
-python3 src/training/train.py [--train\_path TRAIN\_PATH] [--val\_path VAL\_PATH] [--model\_path MODEL\_PATH] [--num\_epochs NUM\_EPOCHS] [--batch\_size BATCH\_SIZE] [--learning\_rate LEARNING\_RATE]
+python3 src/training/train.py [--train_path TRAIN_PATH] [--val_path VAL_PATH] [--model_path MODEL_PATH] [--num_epochs NUM_EPOCHS] [--batch_size BATCH_SIZE] [--learning_rate LEARNING_RATE]
 ```
 
 Optional arguments:
 
-* --train\_path :Path to the training data (default: data/splits/train)
+* --train_path :Path to the training data (default: data/splits/train)
 
-* --val\_path : Path to the validation data (default: data/splits/val)
+* --val_path : Path to the validation data (default: data/splits/val)
 
-* --model\_path :Path to save the trained model (default: saved\_models)
+* --model_path :Path to save the trained model (default: saved_models)
 
-* --num\_epochs:  Number of epochs to train for (default: 20)
+* --num_epochs:  Number of epochs to train for (default: 20)
 
-* --batch\_size  :Batch size for training (default: 64)
+* --batch_size  :Batch size for training (default: 64)
 
-* --learning\_rate : Learning rate for training (default: 0.01)
+* --learning_rate : Learning rate for training (default: 0.01)
 
 
 Note that there are default values for the arguments.
