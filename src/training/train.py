@@ -1,4 +1,5 @@
 import argparse
+import copy
 import torch
 import torch.nn as nn
 from models.model import PokeModel
@@ -31,73 +32,63 @@ class PokeTrainer():
             self.optimizer, step_size=step_size, gamma=gamma)
 
     def train(self, num_epochs):
-        self.model.train()
         best_acc = 0.0
-        loss = 0
-        best_model_wts = self.model.state_dict()
+        loss = 0.0
+        best_model_wts = copy.deepcopy(self.model.state_dict())
+
         for epoch in range(num_epochs):
+            self.model.train()
             print(f"Epoch {epoch + 1}/{num_epochs}")
             print("-" * 10)
 
             running_loss = 0.0
             running_corrects = 0
-
             for inputs, labels in self.trainloader:
                 inputs = inputs.to(self.device)
                 labels = labels.to(self.device)
 
                 self.optimizer.zero_grad()
-
-                with torch.set_grad_enabled(True):
+                with torch.enable_grad():
                     outputs = self.model(inputs)
                     _, preds = torch.max(outputs, 1)
                     loss = self.criterion(outputs, labels)
                     loss.backward()
                     self.optimizer.step()
-
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
-
             self.scheduler.step()
-
             epoch_loss = running_loss / len(self.trainloader.dataset)
             epoch_acc = running_corrects.double() / len(self.trainloader.dataset)
-
-            print(f"Train Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}")
-
+            print(f"Train Loss: {epoch_loss:.4f} Train Acc: {epoch_acc:.4f}")
+            self.model.eval()
             val_loss, val_acc = self._evaluate()
-
-            print(f"Val Loss: {val_loss:.4f} Acc: {val_acc:.4f}")
-            print()
-
             if val_acc > best_acc:
                 best_acc = val_acc
                 loss = val_loss
-                best_model_wts = self.model.state_dict()
-
+                best_model_wts = copy.deepcopy(self.model.state_dict())
+        print(f"Best val Acc: {best_acc:4f} Best val loss : {val_loss:4f}")
         self.model.load_state_dict(best_model_wts)
         return self.model, loss, best_acc
 
     def _evaluate(self):
-        self.model.eval()
-        running_loss = 0.0
-        running_corrects = 0
-
         with torch.no_grad():
-            for inputs, labels in self.valloader:
-                inputs = inputs.to(self.device)
-                labels = labels.to(self.device)
+            val_running_loss = 0.0
+            val_running_corrects = 0
+            for val_inputs, val_labels in self.valloader:
+                val_inputs = val_inputs.to(self.device)
+                val_labels = val_labels.to(self.device)
 
-                outputs = self.model(inputs)
-                _, preds = torch.max(outputs, 1)
-                loss = self.criterion(outputs, labels)
+                val_outputs = self.model(val_inputs)
+                _, val_preds = torch.max(val_outputs, 1)
+                val_loss = self.criterion(val_outputs, val_labels)
 
-                running_loss += loss.item() * inputs.size(0)
-                running_corrects += torch.sum(preds == labels.data)
+                val_running_loss += val_loss.item() * val_inputs.size(0)
+                val_running_corrects += torch.sum(val_preds == val_labels.data)
 
-            loss = running_loss / len(self.trainloader.dataset)
-            accuracy = running_corrects.double() / len(self.trainloader.dataset)
-            return loss, accuracy
+            val_loss = val_running_loss / len(self.valloader.dataset)
+            val_acc = val_running_corrects.double() / len(self.valloader.dataset)
+
+        return val_loss, val_acc
 
 
 def get_args():
@@ -111,7 +102,7 @@ def get_args():
     parser.add_argument('--num_epochs', type=int,
                         default=20, help='Number of epochs of the training')
     parser.add_argument('--batch_size', type=int,
-                        default=16, help='Batch size of the training')
+                        default=8, help='Batch size of the training')
     parser.add_argument('--learning_rate', type=float,
                         default=0.01, help='Learning rate of the training')
     args = parser.parse_args()

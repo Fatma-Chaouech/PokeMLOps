@@ -4,63 +4,73 @@ import torch
 import warnings
 from torchvision import datasets, transforms
 import logging
-import numpy as np
 from PIL import Image
+import numpy as np
+import torchvision.models as models
 
 warnings.filterwarnings("ignore", category=UserWarning)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-# def save_dataset(dataset, output_dir):
-#     labels = dataset.classes
-#     if not os.path.exists(output_dir):
-#         os.makedirs(output_dir)
-
-#     # Define the transformation
-#     transform = transforms.Compose([
-#         transforms.ToPILImage(mode='RGB')
-#     ])
-
-#     for i, (image, label_idx) in enumerate(dataset):
-#         label = labels[label_idx]
-#         image_np = image.mul(255).byte().numpy()
-#         # transform to the format expected by PIL
-#         image_pil = Image.fromarray(np.transpose(image_np, (1, 2, 0)))
-#         label_dir = os.path.join(output_dir, str(label))
-#         if not os.path.exists(label_dir):
-#             os.makedirs(label_dir)
-#         filename = f"{i}.png"
-#         filepath = os.path.join(label_dir, filename)
-#         image = transform(image)
-#         image_pil.save(filepath)
-
-
 def save_dataset(dataset, output_dir):
     labels = dataset.classes
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+
+    # Define the transformation
+    transform = transforms.Compose([
+        transforms.ToPILImage(mode='RGB')
+    ])
+
     for i, (image, label_idx) in enumerate(dataset):
-        # image = Image.fromarray()
         label = labels[label_idx]
+        image_np = image.mul(255).byte().numpy()
+        # transform to the format expected by PIL
+        image_pil = Image.fromarray(np.transpose(image_np, (1, 2, 0)))
         label_dir = os.path.join(output_dir, str(label))
         if not os.path.exists(label_dir):
             os.makedirs(label_dir)
         filename = f"{i}.png"
         filepath = os.path.join(label_dir, filename)
-        
-        # Denormalize the image
-        # print(image.shape)
-        # image = (image * torch.tensor([0.229, 0.224, 0.225]).reshape(3, 1, 1)) + torch.tensor([0.485, 0.456, 0.406]).reshape(3, 1, 1)
-        # image = torch.clamp(image, 0, 1)
-        # print(image.shape)
-        transform = transforms.Compose([
-            transforms.ToPILImage(mode='RGB')
-        ])
         image = transform(image)
-        image.save(filepath)
-        print(filepath)
-        break
+        image_pil.save(filepath)
+
+
+# def save_dataset(dataset, output_dir):
+#     labels = dataset.classes
+#     if not os.path.exists(output_dir):
+#         os.makedirs(output_dir)
+#     for i, (image, label_idx) in enumerate(dataset):
+#         # image = Image.fromarray()
+#         label = labels[label_idx]
+#         label_dir = os.path.join(output_dir, str(label))
+#         if not os.path.exists(label_dir):
+#             os.makedirs(label_dir)
+#         filename = f"{i}.png"
+#         filepath = os.path.join(label_dir, filename)
+#         # Denormalize the image
+#         # print(image.shape)
+#         # image = (image * torch.tensor([0.229, 0.224, 0.225]).reshape(3, 1, 1)) + torch.tensor([0.485, 0.456, 0.406]).reshape(3, 1, 1)
+#         # image = torch.clamp(image, 0, 1)
+#         # print(image.shape)
+#         transform = transforms.Compose([
+#             transforms.ToPILImage(mode='RGB')
+#         ])
+#         image = transform(image)
+#         image.save(filepath)
+        # image = Image.open(filepath)
+        # transform = transforms.Compose([transforms.ToTensor()])
+        # image = transform(image)
+        # mean = torch.tensor([0.485, 0.456, 0.406]).reshape(3, 1, 1)
+        # std = torch.tensor([0.229, 0.224, 0.225]).reshape(3, 1, 1)
+        # image = image * std + mean
+        # transform = transforms.Compose([
+        #     transforms.ToPILImage(mode='RGB')
+        # ])
+        # image = transform(image)
+        # image.save(filepath)
+        # break
 
 def save_files(dir, files, dataset_dir):
     """
@@ -106,6 +116,13 @@ def get_image(image_path):
     return transform(image)
 
 
+def get_model(model_path):
+    model = models.VGG11(pretrained=False)
+    model.load_state_dict(torch.load(
+        model_path, map_location=torch.device('cpu')))
+    return model
+
+
 def save_image(image, image_path):
     if not os.path.exists(image_path):
         os.makedirs(image_path)
@@ -118,9 +135,12 @@ def save_image(image, image_path):
 
 
 def save_model(model, model_path):
-    torch.save(model.state_dict(), model_path)
+    if not os.path.exists(model_path):
+        os.makedirs(model_path)
+    model_name = 'model.pt'
+    torch.save(model.state_dict(), model_path + '/' + model_name)
 
 
-def save_loss_acc(loss, accuracy):
-    with open("val_loss_acc.txt", "w") as f:
+def save_loss_acc(loss, accuracy, mode='val'):
+    with open(mode + "_loss_acc.txt", "w") as f:
         f.write(f"Validation Loss: {loss}\nValidation Accuracy: {accuracy}")

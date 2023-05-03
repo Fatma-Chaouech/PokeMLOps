@@ -1,7 +1,6 @@
 import torch.nn as nn
 import torch.hub
 
-
 class PokeModel(nn.Module):
     def __init__(self, num_classes, pretrained=True):
         super(PokeModel, self).__init__()
