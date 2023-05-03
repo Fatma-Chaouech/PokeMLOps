@@ -8,10 +8,27 @@ import logging
 from PIL import Image
 import numpy as np
 import torchvision.models as models
+import mlflow
+import mlflow.pytorch
 
 warnings.filterwarnings("ignore", category=UserWarning)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+
+def log_metrics(loss, accuracy, epoch, mode='train'):
+    mlflow.log_metric("loss", loss, epoch, mode)
+    mlflow.log_metric("accuracy", accuracy, epoch, mode)
+
+
+def log_params(num_epochs, batch_size, learning_rate):
+    mlflow.log_metric("num_epochs", num_epochs)
+    mlflow.log_metric("batch_size", batch_size)
+    mlflow.log_metric("learning_rate", learning_rate)
+
+
+def log_model(model, model_dir):
+    mlflow.pytorch.log_model(model, model_dir)
 
 
 def save_dataset(dataset, output_dir):
@@ -135,13 +152,13 @@ def save_image(image, image_path):
     image.save(image_path)
 
 
-def save_model(model, model_path):
-    if not os.path.exists(model_path):
-        os.makedirs(model_path)
-    model_name = 'model.pt'
-    torch.save(model, model_path + '/' + model_name)
+# def save_model(model, model_path):
+#     if not os.path.exists(model_path):
+#         os.makedirs(model_path)
+#     model_name = 'model.pt'
+#     torch.save(model, model_path + '/' + model_name)
 
 
-def save_loss_acc(loss, accuracy, mode='val'):
-    with open(mode + "_loss_acc.txt", "w") as f:
-        f.write(f"Validation Loss: {loss}\nValidation Accuracy: {accuracy}")
+# def save_loss_acc(loss, accuracy, mode='val'):
+#     with open(mode + "_loss_acc.txt", "w") as f:
+#         f.write(f"Validation Loss: {loss}\nValidation Accuracy: {accuracy}")

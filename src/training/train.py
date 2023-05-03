@@ -3,19 +3,21 @@ from torchmetrics import Accuracy
 import torch
 import torch.nn as nn
 from models.model import PokeModel
-from utils.utils import get_loader, save_model, save_loss_acc
+from utils.utils import get_loader, log_metrics, log_params, log_model
+import mlflow
 
 
 def run():
-    train_path, val_path, model_path, num_epochs, batch_size, learning_rate = get_args()
-    trainloader, num_classes = get_loader(train_path, batch_size)
-    valloader, _ = get_loader(val_path, batch_size)
-    classifier = PokeModel(num_classes)
-    trainer = PokeTrainer(classifier, trainloader, valloader, learning_rate)
-    classifier.model.requires_grad = True
-    trainer.train(num_epochs, model_path)
-    # save_model(classifier, model_path)
-    # save_loss_acc(val_loss, val_accuracy)
+    with mlflow.start_run():
+        train_path, val_path, model_path, num_epochs, batch_size, learning_rate = get_args()
+        log_params(num_epochs, batch_size, learning_rate)
+        trainloader, num_classes = get_loader(train_path, batch_size)
+        valloader, _ = get_loader(val_path, batch_size)
+        classifier = PokeModel(num_classes)
+        trainer = PokeTrainer(classifier, trainloader,
+                              valloader, learning_rate)
+        classifier.model.requires_grad = True
+        trainer.train(num_epochs, model_path)
 
 
 class PokeTrainer():
@@ -28,7 +30,7 @@ class PokeTrainer():
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = torch.optim.SGD(
             self.model.parameters(), lr=learning_rate, momentum=momentum)
-        num_classes = self.model.classifier[6].out_features
+        num_classes = self.model.num_classes
         self.accuracy = Accuracy(task="multiclass", num_classes=num_classes)
         self.scheduler = torch.optim.lr_scheduler.StepLR(
             self.optimizer, step_size=step_size, gamma=gamma)
@@ -60,15 +62,14 @@ class PokeTrainer():
             self.scheduler.step()
             epoch_loss = running_loss / len(self.trainloader.dataset)
             epoch_acc = running_corrects.double() / len(self.trainloader.dataset)
-            print(f"Train Loss: {epoch_loss:.4f} Train Acc: {epoch_acc:.4f}")
+            log_metrics(epoch_loss, epoch_acc, epoch, mode='train')
             self.model.eval()
             val_loss, val_acc = self._evaluate()
             if val_acc > best_acc:
                 best_acc = val_acc
                 loss = val_loss
-                save_loss_acc(loss, best_acc)
-                save_model(self.model, model_path)
-        print(f"Best val Acc: {best_acc:4f} Best val loss : {val_loss:4f}")
+                log_metrics(loss, val_acc, epoch, mode='val')
+                log_model(self.model, model_path)
 
     def _evaluate(self):
         with torch.no_grad():

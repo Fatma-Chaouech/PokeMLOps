@@ -19,11 +19,15 @@ conda env create -f environment.yml
 ```
 conda activate pokenv
 ```
-5. Pull the dataset
+5. Start MLFlow server
+```
+mlflow server [--host HOST] [--port PORT]
+```
+6. Pull the dataset
 ```
 dvc pull
 ```
-6. set a PYTHONPATH environment variable
+7. set a PYTHONPATH environment variable
 ```
 export PYTHONPATH=$PWD/src:$PYTHONPATH
 ```
