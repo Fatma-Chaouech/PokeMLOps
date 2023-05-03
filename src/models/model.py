@@ -10,7 +10,6 @@ class PokeModel(nn.Module):
         self.model.fc = torch.nn.Linear(
             self.model.classifier[6].in_features, num_classes)
 
-
     def forward(self, x):
         x = self.model(x)
         return x

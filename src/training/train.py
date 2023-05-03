@@ -1,5 +1,5 @@
 import argparse
-import copy
+from torchmetrics import Accuracy
 import torch
 import torch.nn as nn
 from models.model import PokeModel
@@ -28,13 +28,14 @@ class PokeTrainer():
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = torch.optim.SGD(
             self.model.parameters(), lr=learning_rate, momentum=momentum)
+        num_classes = self.model.classifier[6].out_features
+        self.accuracy = Accuracy(task="multiclass", num_classes=num_classes)
         self.scheduler = torch.optim.lr_scheduler.StepLR(
             self.optimizer, step_size=step_size, gamma=gamma)
 
     def train(self, num_epochs, model_path):
         best_acc = 0.0
         loss = 0.0
-        # best_model_wts = copy.deepcopy(self.model.state_dict())
 
         for epoch in range(num_epochs):
             self.model.train()
@@ -55,7 +56,7 @@ class PokeTrainer():
                     loss.backward()
                     self.optimizer.step()
                 running_loss += loss.item() * inputs.size(0)
-                running_corrects += torch.sum(preds == labels.data)
+                running_corrects += self.accuracy(preds, labels.data)
             self.scheduler.step()
             epoch_loss = running_loss / len(self.trainloader.dataset)
             epoch_acc = running_corrects.double() / len(self.trainloader.dataset)
@@ -68,8 +69,6 @@ class PokeTrainer():
                 save_loss_acc(loss, best_acc)
                 save_model(self.model, model_path)
         print(f"Best val Acc: {best_acc:4f} Best val loss : {val_loss:4f}")
-        # self.model.load_state_dict(best_model_wts)
-        # return self.model, loss, best_acc
 
     def _evaluate(self):
         with torch.no_grad():
@@ -84,7 +83,8 @@ class PokeTrainer():
                 val_loss = self.criterion(val_outputs, val_labels)
 
                 val_running_loss += val_loss.item() * val_inputs.size(0)
-                val_running_corrects += torch.sum(val_preds == val_labels.data)
+                val_running_corrects += self.accuracy(
+                    val_preds, val_labels.data)
 
             val_loss = val_running_loss / len(self.valloader.dataset)
             val_acc = val_running_corrects.double() / len(self.valloader.dataset)
