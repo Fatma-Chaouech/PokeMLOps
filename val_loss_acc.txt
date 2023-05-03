@@ -1,2 +1,0 @@
-Validation Loss: nan
-Validation Accuracy: 0.0021558361564521095

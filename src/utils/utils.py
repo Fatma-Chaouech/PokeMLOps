@@ -117,9 +117,7 @@ def get_image(image_path):
 
 
 def get_model(model_path):
-    model = models.VGG11(pretrained=False)
-    model.load_state_dict(torch.load(
-        model_path, map_location=torch.device('cpu')))
+    model = torch.load(model_path)
     return model
 
 
@@ -138,7 +136,7 @@ def save_model(model, model_path):
     if not os.path.exists(model_path):
         os.makedirs(model_path)
     model_name = 'model.pt'
-    torch.save(model.state_dict(), model_path + '/' + model_name)
+    torch.save(model, model_path + '/' + model_name)
 
 
 def save_loss_acc(loss, accuracy, mode='val'):

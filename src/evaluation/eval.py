@@ -41,10 +41,10 @@ def get_args():
     parser = argparse.ArgumentParser(description='Evaluate the model')
     parser.add_argument('--dataset_path', type=str,
                         default='data/splits/test', help='Dataset root')
-    parser.add_argument('--model_path', type=str, default='saved_models/model1.pt',
+    parser.add_argument('--model_path', type=str, default='saved_models/model.pt',
                         help='Model path')
     return parser.parse_args().dataset_path, parser.parse_args().model_path
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     run()
