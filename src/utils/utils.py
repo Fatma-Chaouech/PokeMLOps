@@ -3,6 +3,7 @@ import shutil
 import torch
 import warnings
 from torchvision import datasets, transforms
+from torchvision.utils import save_image, Image as Img
 import logging
 from PIL import Image
 import numpy as np
@@ -54,23 +55,25 @@ def save_dataset(dataset, output_dir):
 #         # image = (image * torch.tensor([0.229, 0.224, 0.225]).reshape(3, 1, 1)) + torch.tensor([0.485, 0.456, 0.406]).reshape(3, 1, 1)
 #         # image = torch.clamp(image, 0, 1)
 #         # print(image.shape)
-#         transform = transforms.Compose([
-#             transforms.ToPILImage(mode='RGB')
-#         ])
+#         # transform = transforms.Compose([
+#         #     transforms.ToPILImage(mode='RGB')
+#         # ])
+#         # image = transform(image)
+#         # image.save(filepath)
+#         save_image(image, filepath, format='png')
+#         image = Img.open(filepath, formats=['png'])
+#         transform = transforms.Compose([transforms.ToTensor()])
 #         image = transform(image)
-#         image.save(filepath)
-        # image = Image.open(filepath)
-        # transform = transforms.Compose([transforms.ToTensor()])
-        # image = transform(image)
-        # mean = torch.tensor([0.485, 0.456, 0.406]).reshape(3, 1, 1)
-        # std = torch.tensor([0.229, 0.224, 0.225]).reshape(3, 1, 1)
-        # image = image * std + mean
-        # transform = transforms.Compose([
-        #     transforms.ToPILImage(mode='RGB')
-        # ])
-        # image = transform(image)
-        # image.save(filepath)
-        # break
+#         mean = torch.tensor([0.485, 0.456, 0.406]).reshape(3, 1, 1)
+#         std = torch.tensor([0.229, 0.224, 0.225]).reshape(3, 1, 1)
+#         image = image * std + mean
+#         # transform = transforms.Compose([
+#         #     transforms.ToPILImage(mode='RGB')
+#         # ])
+#         print(filepath)
+#         # image = transform(image)
+#         save_image(image, filepath, format='png')
+#         break
 
 def save_files(dir, files, dataset_dir):
     """

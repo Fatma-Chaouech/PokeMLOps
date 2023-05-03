@@ -13,9 +13,9 @@ def run():
     classifier = PokeModel(num_classes)
     trainer = PokeTrainer(classifier, trainloader, valloader, learning_rate)
     classifier.model.requires_grad = True
-    classifier, val_loss, val_accuracy = trainer.train(num_epochs)
-    save_model(classifier, model_path)
-    save_loss_acc(val_loss, val_accuracy)
+    trainer.train(num_epochs, model_path)
+    # save_model(classifier, model_path)
+    # save_loss_acc(val_loss, val_accuracy)
 
 
 class PokeTrainer():
@@ -31,10 +31,10 @@ class PokeTrainer():
         self.scheduler = torch.optim.lr_scheduler.StepLR(
             self.optimizer, step_size=step_size, gamma=gamma)
 
-    def train(self, num_epochs):
+    def train(self, num_epochs, model_path):
         best_acc = 0.0
         loss = 0.0
-        best_model_wts = copy.deepcopy(self.model.state_dict())
+        # best_model_wts = copy.deepcopy(self.model.state_dict())
 
         for epoch in range(num_epochs):
             self.model.train()
@@ -65,10 +65,11 @@ class PokeTrainer():
             if val_acc > best_acc:
                 best_acc = val_acc
                 loss = val_loss
-                best_model_wts = copy.deepcopy(self.model.state_dict())
+                save_loss_acc(loss, best_acc)
+                save_model(self.model, model_path)
         print(f"Best val Acc: {best_acc:4f} Best val loss : {val_loss:4f}")
-        self.model.load_state_dict(best_model_wts)
-        return self.model, loss, best_acc
+        # self.model.load_state_dict(best_model_wts)
+        # return self.model, loss, best_acc
 
     def _evaluate(self):
         with torch.no_grad():
@@ -87,7 +88,6 @@ class PokeTrainer():
 
             val_loss = val_running_loss / len(self.valloader.dataset)
             val_acc = val_running_corrects.double() / len(self.valloader.dataset)
-
         return val_loss, val_acc
 
 
@@ -104,7 +104,7 @@ def get_args():
     parser.add_argument('--batch_size', type=int,
                         default=8, help='Batch size of the training')
     parser.add_argument('--learning_rate', type=float,
-                        default=0.01, help='Learning rate of the training')
+                        default=0.001, help='Learning rate of the training')
     args = parser.parse_args()
     return args.train_path, args.val_path, args.model_path, args.num_epochs, args.batch_size, args.learning_rate
 
