@@ -87,3 +87,4 @@ target/
 .mypy_cache/
 
 gdrive:*/
+saved_models/*
