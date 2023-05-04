@@ -1,7 +1,7 @@
 import argparse
 from sklearn.model_selection import train_test_split
 import os
-from utils.utils import save_files
+from utils.dvc_utils import save_files
 
 
 def run():

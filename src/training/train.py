@@ -3,7 +3,8 @@ from torchmetrics import Accuracy
 import torch
 import torch.nn as nn
 from models.model import PokeModel
-from utils.utils import get_loader, log_metrics, log_params, log_model
+from utils.common_utils import get_loader
+from utils.mlflow_utils import log_metrics, log_params, log_model
 import mlflow
 
 

@@ -1,5 +1,7 @@
 import argparse
-from utils.utils import get_model, get_loader, log_metrics, log_artifact
+from utils.common_utils import get_loader
+from utils.dvc_utils import get_model
+from utils.mlflow_utils import log_metrics, log_artifact
 import torch
 from torchmetrics import Accuracy
 import torch.nn as nn
@@ -45,7 +47,6 @@ def evaluate(model, loader):
         loss = running_loss / len(loader.dataset)
         acc = running_corrects.double() / len(loader.dataset)
 
-        # Generate classification report
         report = classification_report(y_true, y_pred)
 
         return loss, acc, report

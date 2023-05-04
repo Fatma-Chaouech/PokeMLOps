@@ -1,7 +1,6 @@
 import torch
-from utils.utils import save_image, get_image
+from utils.common_utils import save_image, get_image
 import argparse
-import numpy as np
 from torchvision import transforms
 from PIL import Image
 

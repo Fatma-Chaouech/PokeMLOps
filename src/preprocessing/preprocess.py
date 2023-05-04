@@ -1,6 +1,6 @@
 from torchvision import transforms, datasets
 import argparse
-from utils.utils import save_dataset
+from utils.dvc_utils import save_dataset
 
 
 def run():
