@@ -1,7 +1,8 @@
 import argparse
+from utils.opentelemetry_utils import get_telemetry_args
 from utils.common_utils import get_loader
 from utils.dvc_utils import get_model
-from utils.mlflow_utils import log_metrics, log_artifact
+from utils.mlflow_utils import log_acc_loss, log_artifact
 import torch
 from torchmetrics import Accuracy
 import torch.nn as nn
@@ -13,7 +14,7 @@ def run():
     model = get_model(model_path)
     loader, _ = get_loader(dataset_path)
     loss, accuracy, report = evaluate(model, loader)
-    log_metrics(loss, accuracy, mode='test')
+    log_acc_loss(loss, accuracy, mode='test')
     log_artifact(report, name='classification_report')
 
 
@@ -54,11 +55,13 @@ def evaluate(model, loader):
 
 def get_args():
     parser = argparse.ArgumentParser(description='Evaluate the model')
+    telemetry_args = get_telemetry_args(parser)
     parser.add_argument('--dataset_path', type=str,
                         default='data/splits/test', help='Dataset root')
     parser.add_argument('--model_path', type=str, default='saved_models/model.pt',
                         help='Model path')
-    return parser.parse_args().dataset_path, parser.parse_args().model_path
+    args = parser.parse_args()
+    return *telemetry_args, args.dataset_path, args.model_path
 
 
 if __name__ == "__main__":

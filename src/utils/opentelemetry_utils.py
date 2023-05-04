@@ -1,27 +1,19 @@
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import SimpleExportSpanProcessor
+from opentelemetry import trace
+from typing import List
+from utils.mlflow_utils import log_metric
 
-from mlflow.tracking import MlflowClient
-import mlflow
 
-def open_telemetry():
-    # configure the OpenTelemetry exporter
-    otlp_exporter = OTLPSpanExporter(endpoint="localhost:55680")
-    span_processor = SimpleExportSpanProcessor(otlp_exporter)
-    trace_provider = TracerProvider()
-    trace_provider.add_span_processor(span_processor)
+def setup_telemetry():
+    return trace.get_tracer(__name__)
 
-    # initialize the MLFlow client
-    mlflow.set_tracking_uri("http://localhost:5000")
-    mlflow.set_experiment("my_experiment")
 
-    # create a new tracing client that uses the MLFlow client and the OpenTelemetry tracer provider
-    mlflow_client = MlflowClient()
-    tracer = trace_provider.get_tracer(__name__)
-    mlflow_client._tracking_client.tracking_service._client.add_span_processor(
-        trace_provider.get_span_processor()
-    )
+def get_telemetry_args(parser):
+    parser.add_argument('--experiment_name', type=str,
+                        default='Pokemon Capturing', help='Name of the MLFlow experiment')
+    args = parser.parse_args()
+    return args.experiment_name
 
-    return tracer
+
+def quick_span(tracer: object, span_name: str, log_name, log_values: List[float], info: str = None):
+    with tracer.start_as_current_span(span_name):
+        log_metric(log_name, log_values, info)

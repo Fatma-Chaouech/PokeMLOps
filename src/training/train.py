@@ -3,23 +3,30 @@ from torchmetrics import Accuracy
 import torch
 import torch.nn as nn
 from models.model import PokeModel
+from utils.opentelemetry_utils import get_telemetry_args, setup_telemetry
 from utils.common_utils import get_loader
-from utils.mlflow_utils import log_metrics, log_params, log_model
+from utils.mlflow_utils import log_acc_loss, log_params, setup_mlflow, log_model
 import mlflow
+import warnings
+
+
+warnings.filterwarnings("ignore", category=UserWarning)
 
 
 def run():
     experiment_name, train_path, val_path, model_path, num_epochs, batch_size, learning_rate = get_args()
-    mlflow.set_experiment(experiment_name)
+    tracer = setup_telemetry()
+    client = setup_mlflow(experiment_name)
     with mlflow.start_run():
-        log_params(num_epochs, batch_size, learning_rate)
-        trainloader, num_classes = get_loader(train_path, batch_size)
-        valloader, _ = get_loader(val_path, batch_size)
-        classifier = PokeModel(num_classes)
-        trainer = PokeTrainer(classifier, trainloader,
-                              valloader, learning_rate)
-        classifier.model.requires_grad = True
-        trainer.train(num_epochs, model_path)
+        with tracer.start_as_current_span("my_span"):
+            log_params(num_epochs, batch_size, learning_rate)
+            trainloader, num_classes = get_loader(train_path, batch_size)
+            valloader, _ = get_loader(val_path, batch_size)
+            classifier = PokeModel(num_classes)
+            trainer = PokeTrainer(classifier, trainloader,
+                                valloader, learning_rate)
+            classifier.model.requires_grad = True
+            trainer.train(num_epochs, model_path)
 
 
 class PokeTrainer():
@@ -64,13 +71,13 @@ class PokeTrainer():
             self.scheduler.step()
             epoch_loss = running_loss / len(self.trainloader.dataset)
             epoch_acc = running_corrects.double() / len(self.trainloader.dataset)
-            log_metrics(epoch_loss, epoch_acc, epoch, mode='train')
+            log_acc_loss(epoch_loss, epoch_acc, epoch, mode='train')
             self.model.eval()
             val_loss, val_acc = self._evaluate()
             if val_acc > best_acc:
                 best_acc = val_acc
                 loss = val_loss
-                log_metrics(loss, val_acc, epoch, mode='val')
+                log_acc_loss(loss, val_acc, epoch, mode='val')
                 log_model(self.model, model_path)
 
     def _evaluate(self):
@@ -96,8 +103,7 @@ class PokeTrainer():
 
 def get_args():
     parser = argparse.ArgumentParser(description='Train pokemon classifier')
-    parser.add_argument('--experiment_name', type=str,
-                        default='Pokemon Capturing', help='Name of the MLFlow experiment')
+    telemetry_args = get_telemetry_args(parser)
     parser.add_argument('--train_path', type=str,
                         default='data/splits/train', help='Training data root')
     parser.add_argument('--val_path', type=str,
@@ -111,7 +117,7 @@ def get_args():
     parser.add_argument('--learning_rate', type=float,
                         default=0.001, help='Learning rate of the training')
     args = parser.parse_args()
-    return args.experiment_name, args.train_path, args.val_path, args.model_path, args.num_epochs, args.batch_size, args.learning_rate
+    return telemetry_args, args.train_path, args.val_path, args.model_path, args.num_epochs, args.batch_size, args.learning_rate
 
 
 if __name__ == "__main__":
