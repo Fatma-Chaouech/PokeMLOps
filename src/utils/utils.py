@@ -7,7 +7,6 @@ from torchvision.utils import save_image, Image as Img
 import logging
 from PIL import Image
 import numpy as np
-import torchvision.models as models
 import mlflow
 import mlflow.pytorch
 
@@ -29,6 +28,10 @@ def log_params(num_epochs, batch_size, learning_rate):
 
 def log_model(model, model_dir):
     mlflow.pytorch.log_model(model, model_dir)
+
+
+def log_artifact(artifact, name):
+    mlflow.log_artifact(artifact, artifact_path=name)
 
 
 def save_dataset(dataset, output_dir):

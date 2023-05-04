@@ -8,8 +8,9 @@ import mlflow
 
 
 def run():
+    experiment_name, train_path, val_path, model_path, num_epochs, batch_size, learning_rate = get_args()
+    mlflow.set_experiment(experiment_name)
     with mlflow.start_run():
-        train_path, val_path, model_path, num_epochs, batch_size, learning_rate = get_args()
         log_params(num_epochs, batch_size, learning_rate)
         trainloader, num_classes = get_loader(train_path, batch_size)
         valloader, _ = get_loader(val_path, batch_size)
@@ -94,6 +95,8 @@ class PokeTrainer():
 
 def get_args():
     parser = argparse.ArgumentParser(description='Train pokemon classifier')
+    parser.add_argument('--experiment_name', type=str,
+                        default='Pokemon Capturing', help='Name of the MLFlow experiment')
     parser.add_argument('--train_path', type=str,
                         default='data/splits/train', help='Training data root')
     parser.add_argument('--val_path', type=str,
@@ -107,7 +110,7 @@ def get_args():
     parser.add_argument('--learning_rate', type=float,
                         default=0.001, help='Learning rate of the training')
     args = parser.parse_args()
-    return args.train_path, args.val_path, args.model_path, args.num_epochs, args.batch_size, args.learning_rate
+    return args.experiment_name, args.train_path, args.val_path, args.model_path, args.num_epochs, args.batch_size, args.learning_rate
 
 
 if __name__ == "__main__":

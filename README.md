@@ -52,6 +52,9 @@ python3 src/splitting/split.py [--root ROOT] [--output OUTPUT] [--train_percenta
 ```
 python3 src/training/train.py [--train_path TRAIN_PATH] [--val_path VAL_PATH] [--model_path MODEL_PATH] [--num_epochs NUM_EPOCHS] [--batch_size BATCH_SIZE] [--learning_rate LEARNING_RATE]
 ```
-
+5. Open MLFlow UI to track the experiment
+```
+mlflow ui
+```
 
 Note that there are default values for the arguments.

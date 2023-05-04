@@ -1,15 +1,18 @@
 import argparse
-from utils.utils import get_model, get_loader, save_loss_acc
+from utils.utils import get_model, get_loader, log_metrics, log_artifact
 import torch
+from torchmetrics import Accuracy
 import torch.nn as nn
+from sklearn.metrics import classification_report
 
 
 def run():
     dataset_path, model_path = get_args()
     model = get_model(model_path)
-    loader = get_loader(dataset_path)
-    loss, accuracy = evaluate(model, loader)
-    save_loss_acc(loss, accuracy, mode='test')
+    loader, _ = get_loader(dataset_path)
+    loss, accuracy, report = evaluate(model, loader)
+    log_metrics(loss, accuracy, mode='test')
+    log_artifact(report, name='classification_report')
 
 
 def evaluate(model, loader):
@@ -18,7 +21,10 @@ def evaluate(model, loader):
     criterion = nn.CrossEntropyLoss()
     model.eval()
     running_loss = 0.0
+    accuracy = Accuracy(task="multiclass", num_classes=model.num_classes)
     running_corrects = 0
+    y_true = []
+    y_pred = []
 
     with torch.no_grad():
         for inputs, labels in loader:
@@ -30,11 +36,19 @@ def evaluate(model, loader):
             loss = criterion(outputs, labels)
 
             running_loss += loss.item() * inputs.size(0)
-            running_corrects += torch.sum(preds == labels.data)
+            running_corrects += accuracy(preds, labels.data)
+
+            # Append true and predicted labels for classification report
+            y_true.extend(labels.cpu().numpy())
+            y_pred.extend(preds.cpu().numpy())
 
         loss = running_loss / len(loader.dataset)
-        accuracy = running_corrects.double() / len(loader.dataset)
-        return loss, accuracy
+        acc = running_corrects.double() / len(loader.dataset)
+
+        # Generate classification report
+        report = classification_report(y_true, y_pred)
+
+        return loss, acc, report
 
 
 def get_args():

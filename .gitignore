@@ -88,3 +88,4 @@ target/
 
 gdrive:*/
 saved_models/*.pt
+mlruns/
