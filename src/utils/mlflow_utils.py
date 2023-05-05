@@ -34,3 +34,4 @@ def log_model(model, model_dir):
 
 def log_artifact(artifact, name):
     mlflow.log_artifact(artifact, artifact_path=name)
+

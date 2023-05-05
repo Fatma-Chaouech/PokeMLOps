@@ -10,8 +10,7 @@ def setup_telemetry():
 def get_telemetry_args(parser):
     parser.add_argument('--experiment_name', type=str,
                         default='Pokemon Capturing', help='Name of the MLFlow experiment')
-    args = parser.parse_args()
-    return args.experiment_name
+    return parser
 
 
 def quick_span(tracer: object, span_name: str, log_name, log_values: List[float], info: str = None):
