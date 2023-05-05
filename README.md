@@ -1,3 +1,4 @@
+![pokemon](docs/pokemon.png)
 # PokeMLOps
 
 PokeMLOps's main objective is to provide a comprehensive and user-friendly MLOps platform by integrating powerful open-source tools that enable easy management, deployment, and evaluation of machine learning models. 
