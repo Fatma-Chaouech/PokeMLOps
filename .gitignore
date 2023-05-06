@@ -89,3 +89,4 @@ target/
 gdrive:*/
 saved_models/*.pt
 mlruns/
+node_modules
