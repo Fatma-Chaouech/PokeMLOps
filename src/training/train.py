@@ -35,6 +35,7 @@ class PokeTrainer():
     def __init__(self, model, trainloader, valloader, learning_rate=0.001, momentum=0.9, step_size=7, gamma=0.1):
         self.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu")
+        print('training on...', self.device)
         self.model = model.to(self.device)
         self.trainloader = trainloader
         self.valloader = valloader
