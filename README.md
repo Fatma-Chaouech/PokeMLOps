@@ -17,7 +17,9 @@ cd PokeMLOps
 ```
 4. Create the environment
 ```
-conda env create -f environment.yml
+conda create --name pokenv
+conda activate pokenv
+conda env update --file environment.yml
 ``` 
 5. Activate the environment
 ```
