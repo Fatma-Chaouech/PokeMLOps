@@ -1,0 +1,14 @@
+name: pokenv
+channels:
+  - defaults
+dependencies:
+  - dvc
+  - dvc-gdrive
+  - scikit-learn
+  - imageio
+  - mlflow
+  - torchmetrics
+  - libpng
+  - pytorch
+  - opentelemetry-sdk
+  - opentelemetry-distro
