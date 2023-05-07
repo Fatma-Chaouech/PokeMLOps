@@ -1,3 +1,5 @@
+import sys
+sys.path.append('src')
 import mlflow
 from mlflow.tracking import MlflowClient
 from typing import List

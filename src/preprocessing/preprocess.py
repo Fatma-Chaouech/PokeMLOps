@@ -1,3 +1,5 @@
+import sys
+sys.path.append('src')
 from torchvision import transforms, datasets
 import argparse
 from utils.dvc_utils import save_dataset

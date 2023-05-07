@@ -1,3 +1,5 @@
+import sys
+sys.path.append('src')
 import argparse
 from utils.opentelemetry_utils import get_telemetry_args
 from utils.common_utils import get_loader

@@ -1,3 +1,5 @@
+import sys
+sys.path.append('src')
 import torch
 from utils.common_utils import save_image, get_image
 import argparse

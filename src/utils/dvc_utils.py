@@ -1,3 +1,5 @@
+import sys
+sys.path.append('src')
 import os
 import shutil
 from torchvision import transforms

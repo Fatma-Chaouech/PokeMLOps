@@ -1,3 +1,5 @@
+import sys
+sys.path.append('src')
 import os
 import torch
 import warnings

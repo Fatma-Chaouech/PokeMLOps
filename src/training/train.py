@@ -1,3 +1,5 @@
+import sys
+sys.path.append('src')
 import argparse
 from torchmetrics import Accuracy
 import torch

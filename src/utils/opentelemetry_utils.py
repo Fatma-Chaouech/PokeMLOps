@@ -1,3 +1,5 @@
+import sys
+sys.path.append('src')
 from opentelemetry import trace
 from typing import List
 from utils.mlflow_utils import log_metric
