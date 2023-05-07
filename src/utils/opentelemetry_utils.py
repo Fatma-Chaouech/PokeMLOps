@@ -2,7 +2,6 @@ import sys
 sys.path.append('src')
 from opentelemetry import trace
 from typing import List
-from utils.mlflow_utils import log_metric
 
 
 def setup_telemetry():
@@ -17,4 +16,4 @@ def get_telemetry_args(parser):
 
 def quick_span(tracer: object, span_name: str, log_name, log_values: List[float], info: str = None):
     with tracer.start_as_current_span(span_name):
-        log_metric(log_name, log_values, info)
+        pass

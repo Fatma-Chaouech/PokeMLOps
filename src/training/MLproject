@@ -1,0 +1,14 @@
+name: pokemon-classifier
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    command: "python3 src/train.py"
+    parameters:
+      experiment_name: {type: string, default: "PokeClassifier"}
+      train_path: {type: string, default: "data/splits/train"}
+      val_path: {type: string, default: "data/splits/val"}
+      model_path: {type: string, default: "saved_models"}
+      num_epochs: {type: int, default: 20}
+      batch_size: {type: int, default: 8}
+      learning_rate: {type: float, default: 0.001}

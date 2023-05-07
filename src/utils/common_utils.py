@@ -42,15 +42,3 @@ def save_image(image, image_path):
     ])
     image = transform(image)
     image.save(image_path)
-
-
-# def save_model(model, model_path):
-#     if not os.path.exists(model_path):
-#         os.makedirs(model_path)
-#     model_name = 'model.pt'
-#     torch.save(model, model_path + '/' + model_name)
-
-
-# def save_loss_acc(loss, accuracy, mode='val'):
-#     with open(mode + "_loss_acc.txt", "w") as f:
-#         f.write(f"Validation Loss: {loss}\nValidation Accuracy: {accuracy}")

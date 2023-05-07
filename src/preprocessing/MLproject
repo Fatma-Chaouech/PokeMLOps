@@ -1,0 +1,10 @@
+name: preprocess-data
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    command: "python3 src/preprocess_data.py"
+    parameters:
+      root: {type: str, default: 'data/raw', description: 'Dataset root'}
+      output: {type: str, default: 'data/preprocessed', description: 'Output directory of preprocessed data'}

@@ -13,8 +13,13 @@ import mlflow
 import warnings
 import logging
 
+
 warnings.filterwarnings("ignore", category=UserWarning)
 logger = logging.getLogger(__name__)
+
+device = torch.device(
+    "cuda:0" if torch.cuda.is_available() else "cpu")
+print('training on...', device)
 
 
 def run():
