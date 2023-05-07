@@ -1,4 +1,6 @@
 [core]
-    remote = mydrive
+    remote = models
 ['remote "mydrive"']
     url = gdrive://1J9ygttylbEVkE0DMxuOU55p8Ltr5-7N3
+['remote "models"']
+    url = gdrive://1OD9IbMP6wTGG0aPR826Hebc8odknOtKM
