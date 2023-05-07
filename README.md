@@ -26,27 +26,23 @@ conda env update --file environment.yml
 dvc pull
 ```
 ### Usage
-1. Set a PYTHONPATH environment variable
-```
-export PYTHONPATH=$PWD/src:$PYTHONPATH
-```
-2. Start MLFlow server
+1. Start MLFlow server
 ```
 mlflow server [--host HOST] [--port PORT]
 ```
-.3 Open MLFlow UI to track the experiments
+2. Open MLFlow UI to track the experiments
 ```
 mlflow ui
 ```
-4. Preprocess the dataset
+3. Preprocess the dataset
 ```
 python3 src/preprocessing/preprocess.py [--root ROOT] [--output OUTPUT]
 ```
-5. Split the dataset
+4. Split the dataset
 ```
 python3 src/splitting/split.py [--root ROOT] [--output OUTPUT] [--train_percentage TRAIN_PERCENTAGE] [--val_percentage VAL_PERCENTAGE] [--random_state RANDOM_STATE]
 ```
-6. Train the model
+5. Train the model
 ```
 python3 src/training/train.py [--train_path TRAIN_PATH] [--val_path VAL_PATH] [--model_path MODEL_PATH] [--num_epochs NUM_EPOCHS] [--batch_size BATCH_SIZE] [--learning_rate LEARNING_RATE]
 ```
