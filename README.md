@@ -15,21 +15,13 @@ git clone https://github.com/Fatma-Chaouech/PokeMLOps.git
 ```
 cd PokeMLOps
 ```
-4. Create the environment
+4. Create and activate the environment
 ```
 conda create --name pokenv
 conda activate pokenv
 conda env update --file environment.yml
 ``` 
-5. Activate the environment
-```
-conda activate pokenv
-```
-6. Start MLFlow server
-```
-mlflow server [--host HOST] [--port PORT]
-```
-7. Pull the dataset
+5. Pull the dataset
 ```
 dvc pull
 ```
@@ -38,19 +30,23 @@ dvc pull
 ```
 export PYTHONPATH=$PWD/src:$PYTHONPATH
 ```
-2. Open MLFlow UI to track the experiments
+2. Start MLFlow server
+```
+mlflow server [--host HOST] [--port PORT]
+```
+.3 Open MLFlow UI to track the experiments
 ```
 mlflow ui
 ```
-3. Preprocess the dataset
+4. Preprocess the dataset
 ```
 python3 src/preprocessing/preprocess.py [--root ROOT] [--output OUTPUT]
 ```
-4. Split the dataset
+5. Split the dataset
 ```
 python3 src/splitting/split.py [--root ROOT] [--output OUTPUT] [--train_percentage TRAIN_PERCENTAGE] [--val_percentage VAL_PERCENTAGE] [--random_state RANDOM_STATE]
 ```
-5. Train the model
+6. Train the model
 ```
 python3 src/training/train.py [--train_path TRAIN_PATH] [--val_path VAL_PATH] [--model_path MODEL_PATH] [--num_epochs NUM_EPOCHS] [--batch_size BATCH_SIZE] [--learning_rate LEARNING_RATE]
 ``
