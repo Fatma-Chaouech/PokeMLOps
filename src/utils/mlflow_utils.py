@@ -50,4 +50,4 @@ def register_model(run_id, model_name, model_description):
     # Register the best model with a unique name
     mlflow.pyfunc.log_model(model, model_name)
     mlflow.register_model(register_id, model_name,
-                          description=model_description)
+                        description=model_description)
