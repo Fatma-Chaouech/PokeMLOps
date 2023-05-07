@@ -1,1 +1,1 @@
-from src.models.model import *
+from models.model import *
