@@ -16,7 +16,7 @@ def run():
     model = get_model(model_path)
     loader, _ = get_loader(dataset_path)
     loss, accuracy, report = evaluate(model, loader)
-    log_acc_loss(loss, accuracy, mode='test')
+    log_acc_loss(loss, accuracy)
     log_artifact(report, name='classification_report')
 
 

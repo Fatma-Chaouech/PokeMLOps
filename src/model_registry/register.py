@@ -1,10 +1,13 @@
 import sys
 sys.path.append('src')
-from utils.dvc_utils import push_model
-from utils.mlflow_utils import register_model
-import mlflow.pyfunc
-import mlflow
+
+import torch
 import argparse
+import mlflow
+import mlflow.pyfunc
+from utils.mlflow_utils import register_model
+from models.model import PokeModel
+from utils.common_utils import get_loader
 
 
 def run():
@@ -30,4 +33,10 @@ def get_args():
 
 
 if __name__ == "__main__":
-    run()
+    # run()
+    model_dir = "saved_models/model.pt"
+    _, num_classes = get_loader('data/splits/train', 8)
+    model = PokeModel(num_classes)
+    model.load_state_dict(torch.load(model_dir))
+    model = torch.load(model_dir)
+    mlflow.pytorch.log_model(model, model_dir)

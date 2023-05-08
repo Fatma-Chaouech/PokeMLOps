@@ -87,13 +87,13 @@ class PokeTrainer():
             self.scheduler.step()
             epoch_loss = running_loss / len(self.trainloader.dataset)
             epoch_acc = running_corrects.double() / len(self.trainloader.dataset)
-            log_acc_loss(epoch_loss, epoch_acc, epoch, mode='train')
+            log_acc_loss(epoch_loss, epoch_acc, epoch)
             self.model.eval()
             val_loss, val_acc = self._evaluate()
             if val_acc > best_acc:
                 best_acc = val_acc
                 loss = val_loss
-                log_acc_loss(loss, val_acc, epoch, mode='val')
+                log_acc_loss(loss, val_acc, epoch)
                 log_model(self.model, model_path)
 
     def _evaluate(self):

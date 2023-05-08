@@ -1,11 +1,13 @@
 import sys
 sys.path.append('src')
-from typing import List
-from mlflow.tracking import MlflowClient
-import mlflow
-import os
+import logging
 from typing import Dict
+import os
+import mlflow
+from mlflow.tracking import MlflowClient
 
+
+logger = logging.getLogger(__name__)
 
 
 def setup_mlflow(experiment_name):
@@ -18,12 +20,12 @@ def setup_mlflow(experiment_name):
     return mlflow_client
 
 
-def log_acc_loss(loss, accuracy, epoch = 0):
+def log_acc_loss(loss, accuracy, epoch=0):
     mlflow.log_metric("loss", loss, epoch)
     mlflow.log_metric("accuracy", accuracy, epoch)
 
 
-def log_metrics(metrics: Dict[str, float], epoch = 0):
+def log_metrics(metrics: Dict[str, float], epoch=0):
     mlflow.log_metrics(metrics, step=epoch)
 
 
@@ -43,11 +45,11 @@ def log_artifact(artifact, name):
 
 def register_model(run_id, model_name, model_description):
 
-    load_id = os.path.join("runs:/" + run_id, "model")
     register_id = os.path.join("runs:/" + run_id, model_name)
-    model = mlflow.pyfunc.load_model(load_id)
+    # model = mlflow.pyfunc.load_model(load_id)
 
-    # Register the best model with a unique name
-    mlflow.pyfunc.log_model(model, model_name)
-    mlflow.register_model(register_id, model_name,
-                        description=model_description)
+    # # Register the best model with a unique name
+    # mlflow.pyfunc.log_model(model, model_name)
+    result = mlflow.register_model(register_id, model_name,
+                                description=model_description)
+    logger.info("Model registeration: %s", result)
