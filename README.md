@@ -23,7 +23,7 @@ conda env update --file environment.yml
 ``` 
 5. Pull the dataset
 ```
-dvc pull
+dvc pull -r mydrive
 ```
 ### Usage
 1. Start MLFlow server
