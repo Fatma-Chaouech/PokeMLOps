@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 def setup_mlflow(experiment_name):
     # initialize the MLFlow client
     mlflow.set_tracking_uri("http://localhost:5000")
+    # to do: add experiment name as a parameter
     mlflow.set_experiment(experiment_name)
 
     # create a new tracing client that uses the MLFlow client and the OpenTelemetry tracer provider

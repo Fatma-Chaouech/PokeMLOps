@@ -27,7 +27,7 @@ stages:
         - ${preprocess.output_dir}/${item}
 
   train:
-    cmd: mlflow run src/training -e train-classifier -P experiment_name=${train.experiment_name} -P train=${preprocess.output_dir}/train -P val=${preprocess.output_dir}/val -P model_path=${train.model_path} -P model_name=${train.model_name} -P num_epochs=${train.num_epochs} -P batch_size=${train.batch_size} -P learning_rate=${train.learning_rate}
+    cmd: mlflow run src/training -e train-classifier --experiment-name=${train.experiment_name} -P experiment_name=${train.experiment_name} -P train=${preprocess.output_dir}/train -P val=${preprocess.output_dir}/val -P model_path=${train.model_path} -P model_name=${train.model_name} -P num_epochs=${train.num_epochs} -P batch_size=${train.batch_size} -P learning_rate=${train.learning_rate}
     deps:
       - ${preprocess.output_dir}/train
       - ${preprocess.output_dir}/val
