@@ -7,3 +7,4 @@ mlruns/
 /saved_models
 params.yaml.dvc
 mlartifacts/
+.pytest_cache/

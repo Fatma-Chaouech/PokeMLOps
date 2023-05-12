@@ -4,13 +4,13 @@ stages:
     cmd: mlflow run src/splitting -e split-data --experiment-name=PokeClassifier
     deps:
     - path: data/raw
-      md5: 464d3caaedcc83153dc023c154629765.dir
-      size: 2177003431
-      nfiles: 22656
+      md5: 165175d2d516d909c176dff0cddb2894.dir
+      size: 298144576
+      nfiles: 1930
     - path: src/splitting
-      md5: 050cf6f9a595d1dfecc371fddaa508cf.dir
-      size: 4133
-      nfiles: 20
+      md5: c8f7c45b47bee652cc3ac625fb53226e.dir
+      size: 6293
+      nfiles: 22
     params:
       params.yaml:
         split.output: data/splits
@@ -20,43 +20,43 @@ stages:
         split.val_percentage: 0.15
     outs:
     - path: data/splits
-      md5: bba5b45bc0043a259b272ad0916a448d.dir
-      size: 2177003431
-      nfiles: 22656
+      md5: b3e21ca0858d62f3b441f1c4814cf92f.dir
+      size: 298144576
+      nfiles: 1930
   preprocess@train:
-    cmd: mlflow run src/preprocessing -e preprocess-data -P phase=train -P input_path=data/splits
-      -P output=data/preprocessed
+    cmd: mlflow run src/preprocessing -e preprocess-data --experiment-name=PokeClassifier
+      -P phase=train -P input_path=data/splits -P output=data/preprocessed
     deps:
     - path: data/splits/train
-      md5: 7eeb6c0cb2dfe1f1c12adaa3e123e289.dir
-      size: 1510935994
-      nfiles: 15734
+      md5: 8097afaaac1bdfd484549c61adfb46a8.dir
+      size: 188447585
+      nfiles: 1198
     - path: src/preprocessing
-      md5: 31833ffce099cd3d806cc8769b66f8a1.dir
-      size: 2831
-      nfiles: 4
+      md5: 5bc0c192a874e0e483ea190e249dd4fb.dir
+      size: 5030
+      nfiles: 6
     outs:
     - path: data/preprocessed/train
-      md5: ebb2f0c9a257cf5f5f06e56188637644.dir
-      size: 1028851720
-      nfiles: 15710
+      md5: 24a9ed37db26dbd50d7cffe56eb3ef48.dir
+      size: 70963852
+      nfiles: 1181
   preprocess@val:
-    cmd: mlflow run src/preprocessing -e preprocess-data -P phase=val -P input_path=data/splits
-      -P output=data/preprocessed
+    cmd: mlflow run src/preprocessing -e preprocess-data --experiment-name=PokeClassifier
+      -P phase=val -P input_path=data/splits -P output=data/preprocessed
     deps:
     - path: data/splits/val
-      md5: f6dff780639bdad34f6193b46edf67c9.dir
-      size: 340617201
-      nfiles: 3442
+      md5: b939370d88d54ca2af7872c10001d61c.dir
+      size: 53902001
+      nfiles: 366
     - path: src/preprocessing
-      md5: 31833ffce099cd3d806cc8769b66f8a1.dir
-      size: 2831
-      nfiles: 4
+      md5: 5bc0c192a874e0e483ea190e249dd4fb.dir
+      size: 5030
+      nfiles: 6
     outs:
     - path: data/preprocessed/val
-      md5: 2fb2ae59f3b945fbd0d5abca4f6b2421.dir
-      size: 226063165
-      nfiles: 3435
+      md5: 35c0a80cc9f412b4d29518de0f08b052.dir
+      size: 22868006
+      nfiles: 361
   preprocess@test:
     cmd: mlflow run src/preprocessing -e preprocess-data -P phase=test -P input_path=data/splits
       -P output=data/preprocessed
@@ -74,3 +74,21 @@ stages:
       md5: ee7ba56efd61f26049acdb1a73c3cff5.dir
       size: 228990717
       nfiles: 3476
+  train:
+    cmd: mlflow run src/training -e train-classifier --experiment-name=PokeClassifier
+      -P experiment_name=PokeClassifier -P train=data/preprocessed/train -P val=data/preprocessed/val
+      -P model_path=saved_models -P model_name=model.pt -P num_epochs=3 -P batch_size=8
+      -P learning_rate=0.001
+    deps:
+    - path: data/preprocessed/train
+      md5: 24a9ed37db26dbd50d7cffe56eb3ef48.dir
+      size: 70963852
+      nfiles: 1181
+    - path: data/preprocessed/val
+      md5: 35c0a80cc9f412b4d29518de0f08b052.dir
+      size: 22868006
+      nfiles: 361
+    - path: src/training
+      md5: ea4c3c9addd6bd9e7da55a460b01a46e.dir
+      size: 8375
+      nfiles: 4

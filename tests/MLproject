@@ -1,0 +1,6 @@
+name: test-classifier
+conda_env: conda.yaml
+
+entry_points:
+  test-classifier:
+    command: "pytest ../tests"

@@ -9,7 +9,7 @@ entry_points:
       train_path: {type: string, default: "data/preprocessed/train"}
       val_path: {type: string, default: "data/preprocessed/val"}
       model_path: {type: string, default: "saved_models"}
-      model_name: {type: string, default: "model.pt"}
+      model_name: {type: string, default: "saved_models"}
       num_epochs: {type: int, default: 20}
       batch_size: {type: int, default: 8}
       learning_rate: {type: float, default: 0.001}

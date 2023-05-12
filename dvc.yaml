@@ -32,16 +32,14 @@ stages:
       - ${preprocess.output_dir}/train
       - ${preprocess.output_dir}/val
       - src/training
-    outs:
-      - ${train.model_path}/${train.model_name}
 
   evaluate:
     cmd: mlflow run src/evaluation -e evaluate-model 
     params:
       - evaluate.environment_name
-      - ${train.model_path}/${train.model_name}
       - ${preprocess.output_dir}/test
+      - ${train.model_path}
     deps:
-      - ${train.model_path}/${train.model_name}
+      - ${train.model_path}
       - ${preprocess.output_dir}/test
       - src/evaluation

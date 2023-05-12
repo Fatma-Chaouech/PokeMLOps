@@ -18,7 +18,7 @@ import argparse
 def run():
     dataset_path, model_path = get_args()
     dataset_path = os.path.join(PARENT_DIR, dataset_path)
-    model_path = os.path.join(PARENT_DIR, model_path)
+    # model_path = os.path.join(PARENT_DIR, model_path)
     model = get_model(model_path)
     loader, _ = get_loader(dataset_path)
     loss, accuracy, report = evaluate(model, loader)
@@ -66,7 +66,7 @@ def get_args():
     telemetry_args = get_telemetry_args(parser)
     parser.add_argument('--test-path', type=str,
                         default='data/preprocessed/test', help='Test root directory')
-    parser.add_argument('--model-path', type=str, default='saved_models/model.pt',
+    parser.add_argument('--model-path', type=str, default='saved_models',
                         help='Model path')
     args = parser.parse_args()
     return *telemetry_args, args.test_path, args.model_path

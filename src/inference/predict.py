@@ -16,7 +16,7 @@ logger.setLevel(logging.DEBUG)
 def run():
     images_dir, model_path = get_args()
     images_dir = os.path.join(PARENT_DIR, images_dir)   
-    model_path = os.path.join(PARENT_DIR, model_path)
+    # model_path = os.path.join(PARENT_DIR, model_path)
     predictions = []
     model = get_model(model_path)
     model.eval()
@@ -31,8 +31,8 @@ def get_args():
     parser = argparse.ArgumentParser(description='Inference script')
     parser.add_argument('--images-path', type=str,
                         default='data/inference', help='Images root')
-    parser.add_argument('--model-path', type=str, default='saved_models/model.pt',
-                        help='Model path')
+    parser.add_argument('--model-path', type=str, default='saved_models',
+                        help='Model name')
     args = parser.parse_args()
     return args.images_path, args.model_path
 

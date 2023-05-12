@@ -16,5 +16,5 @@ entry_points:
         description: "Path to test data"
       model_path:
         type: str
-        default: "saved_models/model.pt"
-        description: "Path to model"
+        default: "saved_models"
+        description: "Name of the model"

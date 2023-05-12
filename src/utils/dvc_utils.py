@@ -35,12 +35,3 @@ def save_files(dir, files, dataset_dir):
         src_file = os.path.join(dataset_dir, file)
         dst_file = os.path.join(dir, file)
         shutil.copy(src_file, dst_file)
-
-
-def get_model(model_path):
-    model = torch.load(model_path)
-    return model
-
-
-def push_model(run_id, model_name):
-    pass

@@ -34,8 +34,7 @@ def log_params(num_epochs, batch_size, learning_rate):
     mlflow.log_param("learning_rate", learning_rate)
 
 
-def log_model(model, model_dir, model_name):
-    model_path = os.path.join(os.path.basename(model_dir), model_name)
+def log_model(model, model_path):
     mlflow.pytorch.log_model(model, model_path)
 
 
@@ -43,13 +42,18 @@ def log_artifact(artifact, name):
     mlflow.log_artifact(artifact, artifact_path=name)
 
 
-def register_model(run_id, model_name, model_description):
+def register_model(run_id, model_path, model_description):
 
-    register_id = os.path.join("runs:/" + run_id, model_name)
+    register_id = os.path.join("runs:/" + run_id, model_path)
     # model = mlflow.pyfunc.load_model(load_id)
 
     # # Register the best model with a unique name
-    # mlflow.pyfunc.log_model(model, model_name)
-    result = mlflow.register_model(register_id, model_name,
+    # mlflow.pyfunc.log_model(model, model_path)
+    result = mlflow.register_model(register_id, model_path,
                                    description=model_description)
     logger.info("Model registeration: %s", result)
+
+
+def get_model(model_path):
+    model = mlflow.pyfunc.load_model(model_path)
+    return model
