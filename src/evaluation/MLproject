@@ -1,0 +1,20 @@
+name: evaluate-model
+
+conda_env: conda.yaml
+
+entry_points:
+  evaluate-model:
+    command: "python3 eval.py --environment-name {environment_name} --test-path {test_path} --model-path {model_path}"
+    parameters:
+      environment_name:
+        type: str
+        default: "PokeClassifier"
+        description: "Environment name"
+      test_path:
+        type: str
+        default: "data/preprocessed/test"
+        description: "Path to test data"
+      model_path:
+        type: str
+        default: "saved_models/model.pt"
+        description: "Path to model"

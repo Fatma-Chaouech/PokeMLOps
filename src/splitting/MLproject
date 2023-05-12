@@ -1,0 +1,13 @@
+name: split-data
+
+conda_env: conda.yaml
+
+entry_points:
+  split-data:
+    command: "python3 split.py --root={root} --output={output} --train-percentage={train_percentage} --val-percentage={val_percentage} --random-state={random_state}"
+    parameters:
+      root: {type: str, default: 'data/raw'}
+      output: {type: str, default: 'data/splits'}
+      train_percentage: {type: float, default: 0.7}
+      val_percentage: {type: float, default: 0.15}
+      random_state: {type: int, default: 42}

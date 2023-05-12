@@ -1,0 +1,13 @@
+name: preprocess-data
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10.9
+  - pip
+  - pip:
+    - torch
+    - torchvision
+    - mlflow
+    - pandas
+

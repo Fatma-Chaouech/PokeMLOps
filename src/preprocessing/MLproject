@@ -1,0 +1,17 @@
+name: preprocess-data
+
+conda_env: conda.yaml
+
+entry_points:
+  preprocess-data:
+    command: "python3 preprocess.py {phase} --input-path {input_path} --output {output}"
+    parameters:
+      phase:
+        type: string
+        description: "Preprocessing type: train, val or test data"
+      input_path:
+        type: string
+        description: "Dataset root directory"
+      output:
+        type: string
+        description: "Output directory of preprocessed data"

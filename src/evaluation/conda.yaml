@@ -1,0 +1,19 @@
+name: evaluate-model
+channels:
+  - pytorch
+dependencies:
+  - python=3.10.9
+  - pip
+  - pytorch
+  - torchvision
+  - scikit-learn
+  - pandas
+  - pyyaml
+  - opentelemetry-api
+  - opentelemetry-sdk
+  - opentelemetry-exporter-otlp-proto
+  - opentelemetry-instrumentation-requests
+  - opentelemetry-instrumentation-sklearn
+  - opentelemetry-instrumentation-torch
+  - opentelemetry-instrumentation-pytorch
+  - opentelemetry-instrumentation-pandas

@@ -1,0 +1,76 @@
+schema: '2.0'
+stages:
+  split:
+    cmd: mlflow run src/splitting -e split-data
+    deps:
+    - path: data/raw
+      md5: 464d3caaedcc83153dc023c154629765.dir
+      size: 2177003431
+      nfiles: 22656
+    - path: src/splitting
+      md5: bbd62b7a5108ff9d26093ecf46a46181.dir
+      size: 4115
+      nfiles: 20
+    params:
+      params.yaml:
+        split.output: data/splits
+        split.random_state: 42
+        split.root: data/raw
+        split.train_percentage: 0.7
+        split.val_percentage: 0.15
+    outs:
+    - path: data/splits
+      md5: bba5b45bc0043a259b272ad0916a448d.dir
+      size: 2177003431
+      nfiles: 22656
+  preprocess@train:
+    cmd: mlflow run src/preprocessing -e preprocess-data -P phase=train -P input_path=data/splits
+      -P output=data/preprocessed
+    deps:
+    - path: data/splits/train
+      md5: 7eeb6c0cb2dfe1f1c12adaa3e123e289.dir
+      size: 1510935994
+      nfiles: 15734
+    - path: src/preprocessing
+      md5: 31833ffce099cd3d806cc8769b66f8a1.dir
+      size: 2831
+      nfiles: 4
+    outs:
+    - path: data/preprocessed/train
+      md5: ebb2f0c9a257cf5f5f06e56188637644.dir
+      size: 1028851720
+      nfiles: 15710
+  preprocess@val:
+    cmd: mlflow run src/preprocessing -e preprocess-data -P phase=val -P input_path=data/splits
+      -P output=data/preprocessed
+    deps:
+    - path: data/splits/val
+      md5: f6dff780639bdad34f6193b46edf67c9.dir
+      size: 340617201
+      nfiles: 3442
+    - path: src/preprocessing
+      md5: 31833ffce099cd3d806cc8769b66f8a1.dir
+      size: 2831
+      nfiles: 4
+    outs:
+    - path: data/preprocessed/val
+      md5: 2fb2ae59f3b945fbd0d5abca4f6b2421.dir
+      size: 226063165
+      nfiles: 3435
+  preprocess@test:
+    cmd: mlflow run src/preprocessing -e preprocess-data -P phase=test -P input_path=data/splits
+      -P output=data/preprocessed
+    deps:
+    - path: data/splits/test
+      md5: c054a8e1d702159e10822ddf15d2094b.dir
+      size: 325450236
+      nfiles: 3480
+    - path: src/preprocessing
+      md5: 31833ffce099cd3d806cc8769b66f8a1.dir
+      size: 2831
+      nfiles: 4
+    outs:
+    - path: data/preprocessed/test
+      md5: ee7ba56efd61f26049acdb1a73c3cff5.dir
+      size: 228990717
+      nfiles: 3476

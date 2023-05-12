@@ -1,0 +1,47 @@
+stages:
+  split:
+    cmd: mlflow run src/splitting -e split-data 
+    params:
+      - split.root
+      - split.output
+      - split.train_percentage
+      - split.val_percentage
+      - split.random_state
+    deps:
+      - ${split.root}
+      - src/splitting
+    outs:
+      - ${split.output}
+
+  preprocess:
+    foreach:
+      - ${preprocess.train}
+      - ${preprocess.val}
+      - ${preprocess.test}
+    do:
+      cmd: mlflow run src/preprocessing -e preprocess-data -P phase=${item} -P input_path=${split.output} -P output=${preprocess.output_dir}
+      deps:
+        - ${split.output}/${item}
+        - src/preprocessing
+      outs:
+        - ${preprocess.output_dir}/${item}
+
+  train:
+    cmd: mlflow run src/training -e train-classifier -P experiment_name=${train.experiment_name} -P train=${preprocess.output_dir}/train -P val=${preprocess.output_dir}/val -P model_path=${train.model_path} -P model_name=${train.model_name} -P num_epochs=${train.num_epochs} -P batch_size=${train.batch_size} -P learning_rate=${train.learning_rate}
+    deps:
+      - ${preprocess.output_dir}/train
+      - ${preprocess.output_dir}/val
+      - src/training
+    outs:
+      - ${train.model_path}/${train.model_name}
+
+  evaluate:
+    cmd: mlflow run src/evaluation -e evaluate-model 
+    params:
+      - evaluate.environment_name
+      - ${train.model_path}/${train.model_name}
+      - ${preprocess.output_dir}/test
+    deps:
+      - ${train.model_path}/${train.model_name}
+      - ${preprocess.output_dir}/test
+      - src/evaluation

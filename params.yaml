@@ -1,0 +1,23 @@
+split:
+  root: data/raw
+  output: data/splits
+  train_percentage: 0.7
+  val_percentage: 0.15
+  random_state: 42
+
+preprocess:
+  train: train
+  val: val
+  test: test
+  output_dir: data/preprocessed
+
+train:
+  experiment_name: 'PokeClassifier'
+  model_path: 'saved_models'
+  model_name: 'model.pt'
+  num_epochs: 12
+  batch_size: 8
+  learning_rate: 0.001
+
+evaluate:
+  environment_name: 'PokeClassifier'

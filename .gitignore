@@ -1,0 +1,9 @@
+# cache
+*__pycache__*
+.vscode/
+
+saved_models/*.pt
+mlruns/
+/saved_models
+params.yaml.dvc
+mlartifacts/

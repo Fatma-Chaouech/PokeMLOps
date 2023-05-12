@@ -1,0 +1,14 @@
+name: pokemon-classifier
+channels:
+  - defaults
+  - pytorch
+dependencies:
+  - python=3.10.9
+  - pip
+  - pip:
+    - mlflow
+    - opentelemetry-api
+    - opentelemetry-sdk
+    - torch
+    - torchvision
+    - torchmetrics
