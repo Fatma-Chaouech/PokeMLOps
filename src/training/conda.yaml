@@ -9,6 +9,5 @@ dependencies:
     - mlflow
     - opentelemetry-api
     - opentelemetry-sdk
-    - torch
     - torchvision
     - torchmetrics

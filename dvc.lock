@@ -1,15 +1,15 @@
 schema: '2.0'
 stages:
   split:
-    cmd: mlflow run src/splitting -e split-data
+    cmd: mlflow run src/splitting -e split-data --experiment-name=PokeClassifier
     deps:
     - path: data/raw
       md5: 464d3caaedcc83153dc023c154629765.dir
       size: 2177003431
       nfiles: 22656
     - path: src/splitting
-      md5: bbd62b7a5108ff9d26093ecf46a46181.dir
-      size: 4115
+      md5: 050cf6f9a595d1dfecc371fddaa508cf.dir
+      size: 4133
       nfiles: 20
     params:
       params.yaml:
