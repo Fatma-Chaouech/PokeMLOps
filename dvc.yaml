@@ -1,6 +1,6 @@
 stages:
   split:
-    cmd: mlflow run src/splitting -e split-data 
+    cmd: mlflow run src/splitting -e split-data --experiment-name=${train.experiment_name}
     params:
       - split.root
       - split.output
@@ -19,7 +19,7 @@ stages:
       - ${preprocess.val}
       - ${preprocess.test}
     do:
-      cmd: mlflow run src/preprocessing -e preprocess-data -P phase=${item} -P input_path=${split.output} -P output=${preprocess.output_dir}
+      cmd: mlflow run src/preprocessing -e preprocess-data --experiment-name=${train.experiment_name} -P phase=${item} -P input_path=${split.output} -P output=${preprocess.output_dir}
       deps:
         - ${split.output}/${item}
         - src/preprocessing

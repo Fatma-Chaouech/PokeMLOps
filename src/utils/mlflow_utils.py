@@ -35,7 +35,7 @@ def log_params(num_epochs, batch_size, learning_rate):
 
 
 def log_model(model, model_dir, model_name):
-    model_path = os.path.join(model_dir, model_name)
+    model_path = os.path.join(os.path.basename(model_dir), model_name)
     mlflow.pytorch.log_model(model, model_path)
 
 
